@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PLACEHOLDER</title>
+    <script>
+      ;(function () {
+        var key = 'samuel-learn-lang'
+        var lang = 'es'
+        try {
+          var stored = localStorage.getItem(key)
+          if (stored === 'es' || stored === 'en') lang = stored
+          else if ((navigator.language || '').toLowerCase().indexOf('en') === 0) lang = 'en'
+        } catch (e) {}
+        document.documentElement.lang = lang
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
