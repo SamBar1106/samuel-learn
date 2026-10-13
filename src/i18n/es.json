@@ -5,5 +5,20 @@
   "language": {
     "es": "ES",
     "en": "EN"
+  },
+  "lesson": {
+    "component": {
+      "title": "De dónde viene la palabra «Component».",
+      "source": "Fuente: Online Etymology Dictionary, https://www.etymonline.com/word/component",
+      "sections": {
+        "root": "Desglose de la raíz: latín componere «juntar, reunir un todo a partir de varias partes» = com («con, juntos») + ponere («colocar»). Literalmente, «algo colocado junto con otros» para formar un todo.",
+        "entered": "Entró en el inglés desde el latín componentem (nominativo componens), participio de presente de componere.",
+        "use1560s": "Primer uso registrado, década de 1560: «uno de un grupo de personas».",
+        "noun1640s": "Década de 1640: «parte o elemento constitutivo» (sustantivo).",
+        "adjective1660s": "Década de 1660: adjetivo «constitutivo, que entra en la composición de».",
+        "mechanical1896": "1896: «parte mecánica de una bicicleta, un automóvil, etc.».",
+        "today": "Hoy: la misma idea de un bloque de construcción reutilizable es lo que son los componentes de React."
+      }
+    }
   }
 }

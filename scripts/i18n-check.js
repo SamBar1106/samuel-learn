@@ -34,7 +34,11 @@ const esKeys = new Set(flatten(es))
 const enKeys = new Set(flatten(en))
 const missingInEn = [...esKeys].filter((key) => !enKeys.has(key)).sort()
 const missingInEs = [...enKeys].filter((key) => !esKeys.has(key)).sort()
-const contentKeys = (content.pages ?? []).map((page) => page.textKey).filter(Boolean)
+const contentKeys = (content.pages ?? []).flatMap((page) => {
+  const keys = [page.textKey, page.titleKey, page.sourceKey]
+  if (Array.isArray(page.sectionKeys)) keys.push(...page.sectionKeys)
+  return keys.filter((key) => typeof key === 'string' && key !== '')
+})
 const missingContent = []
 
 for (const key of contentKeys) {
@@ -46,7 +50,7 @@ if (missingInEn.length || missingInEs.length || missingContent.length) {
   console.error('i18n:check failed. Every new item ships in both languages.')
   for (const key of missingInEn) console.error(`  missing in en.json: ${key}`)
   for (const key of missingInEs) console.error(`  missing in es.json: ${key}`)
-  for (const key of missingContent) console.error(`  content textKey missing in ${key}`)
+  for (const key of missingContent) console.error(`  content key missing in ${key}`)
   process.exit(1)
 }
 

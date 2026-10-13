@@ -3,6 +3,21 @@
     {
       "id": "home",
       "textKey": "page.placeholder"
+    },
+    {
+      "id": "lesson-component-etymology",
+      "titleKey": "lesson.component.title",
+      "sectionKeys": [
+        "lesson.component.sections.root",
+        "lesson.component.sections.entered",
+        "lesson.component.sections.use1560s",
+        "lesson.component.sections.noun1640s",
+        "lesson.component.sections.adjective1660s",
+        "lesson.component.sections.mechanical1896",
+        "lesson.component.sections.today"
+      ],
+      "sourceKey": "lesson.component.source",
+      "sourceUrl": "https://www.etymonline.com/word/component"
     }
   ]
 }

@@ -3,7 +3,7 @@ import content from '../data/content.json' with { type: 'json' }
 function readPage(pages, id, source) {
   const page = pages.find((item) => item.id === id)
   if (!page) throw new Error(`Unknown page: ${id}`)
-  return { id: page.id, textKey: page.textKey, source }
+  return { ...page, source }
 }
 
 function createLocalAdapter(pages) {
