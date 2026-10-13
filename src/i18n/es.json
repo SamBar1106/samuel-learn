@@ -1,12 +1,55 @@
 {
   "page": {
-    "placeholder": "PLACEHOLDER"
+    "placeholder": "[Placeholder]"
   },
   "language": {
     "es": "ES",
     "en": "EN"
   },
+  "nav": {
+    "lessons": "Lecciones",
+    "areas": "Áreas",
+    "about": "Acerca de",
+    "start": "Empezar a aprender",
+    "menu": "Menú",
+    "close": "Cerrar",
+    "github": "GitHub",
+    "skip": "Saltar al contenido",
+    "primary": "Principal",
+    "footer": "Pie"
+  },
+  "home": {
+    "eyebrow": "Currículo interactivo bilingüe",
+    "titleLead": "Aprender",
+    "titleAccent": "construyendo",
+    "startLesson": "Empezar la primera lección",
+    "explore": "Explorar {{count}} áreas",
+    "startHere": "Empieza aquí",
+    "lessonNumber": "Lección #01",
+    "firstLesson": "Primera lección",
+    "readLesson": "Leer lección",
+    "curriculum": "Currículo",
+    "lessonAreas": "Áreas de lecciones",
+    "areaCount": "{{count}} áreas",
+    "bilingual": "EN / ES"
+  },
+  "areas": {
+    "eyebrow": "Catálogo de áreas",
+    "title": "Áreas de lecciones",
+    "git": { "title": "Git y GitHub" },
+    "agents": { "title": "Dirigir agentes de código con IA" },
+    "mcp": { "title": "MCP" },
+    "anthropic": { "title": "Anthropic" },
+    "react": { "title": "React" },
+    "css": { "title": "CSS" },
+    "languages": { "title": "Lenguajes" },
+    "schemas": { "title": "Esquemas y arquitectura" },
+    "web3d": { "title": "Web 3D" }
+  },
   "lesson": {
+    "area": "Área",
+    "overview": "Resumen de lecciones",
+    "reactName": "React",
     "component": {
       "title": "De dónde viene la palabra «Component».",
       "source": "Fuente: Online Etymology Dictionary, https://www.etymonline.com/word/component",
@@ -20,5 +63,8 @@
         "today": "Hoy: la misma idea de un bloque de construcción reutilizable es lo que son los componentes de React."
       }
     }
+  },
+  "about": {
+    "title": "Acerca de"
   }
 }
