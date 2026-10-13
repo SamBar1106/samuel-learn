@@ -2,7 +2,7 @@
 
 Samuel Barrios personal bilingual (Spanish/English) learning website.
 
-Spanish and English are both first-class. This first step is the scaffold: one sample page whose only copy is placeholder text.
+Spanish and English are both first-class. Home is still the placeholder page. The first lesson, where the word "component" comes from, is at `/lessons/component`.
 
 ## Languages
 
@@ -10,7 +10,7 @@ Translations live in `src/i18n/es.json` and `src/i18n/en.json`. The visitor's ch
 
 Every new item ships in both languages.
 
-`npm run i18n:check` fails when a key exists in one language but not the other. It also fails when a `textKey` in `src/data/content.json` is missing from either language file.
+`npm run i18n:check` fails when a key exists in one language but not the other. It also fails when a page's `textKey`, `titleKey`, `sourceKey`, or `sectionKeys` entry in `src/data/content.json` is missing from either language file.
 
 ## Scripts
 

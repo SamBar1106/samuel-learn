@@ -21,6 +21,26 @@ test('stays on local json when only one supabase variable is set', () => {
   )
 })
 
+test('passes lesson title, sections, and source through', async () => {
+  const page = await chooseAdapter({}).getPage('lesson-component-etymology')
+  assert.deepEqual(page, {
+    id: 'lesson-component-etymology',
+    titleKey: 'lesson.component.title',
+    sectionKeys: [
+      'lesson.component.sections.root',
+      'lesson.component.sections.entered',
+      'lesson.component.sections.use1560s',
+      'lesson.component.sections.noun1640s',
+      'lesson.component.sections.adjective1660s',
+      'lesson.component.sections.mechanical1896',
+      'lesson.component.sections.today',
+    ],
+    sourceKey: 'lesson.component.source',
+    sourceUrl: 'https://www.etymonline.com/word/component',
+    source: 'local',
+  })
+})
+
 test('selects the supabase stub only when both variables are set and does not fetch', async () => {
   const original = globalThis.fetch
   let called = false

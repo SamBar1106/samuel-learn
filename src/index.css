@@ -70,6 +70,63 @@ main h1 {
   letter-spacing: 0.16em;
 }
 
+main a {
+  color: #221e1a;
+}
+
+main a:focus-visible {
+  outline: 2px solid #221e1a;
+  outline-offset: 2px;
+}
+
+.home-intro {
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+  max-width: min(24rem, 100%);
+  text-align: center;
+}
+
+.home-intro a {
+  font-size: 1.05rem;
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+main.lesson {
+  display: block;
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+main.lesson h1 {
+  max-width: 16em;
+  margin-bottom: 1.5rem;
+  font-size: clamp(1.7rem, 3.4vw, 2.25rem);
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+main.lesson article {
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+main.lesson ol {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.lesson-source {
+  margin: 2rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
 .scroll-room {
   height: 45vh;
 }

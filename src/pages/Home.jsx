@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import { data } from '../lib/data'
 
 export function Home() {
@@ -31,7 +32,10 @@ export function Home() {
   return (
     <>
       <main data-source={page.source}>
-        <h1>{t(page.textKey)}</h1>
+        <div className="home-intro">
+          <h1>{t(page.textKey)}</h1>
+          <Link to="/lessons/component">{t('lesson.component.title')}</Link>
+        </div>
       </main>
       <div className="scroll-room" aria-hidden="true" />
     </>
