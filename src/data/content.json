@@ -337,5 +337,199 @@
       "sourceKey": "lesson.component.source",
       "sourceUrl": "https://www.etymonline.com/word/component"
     }
-  ]
+  ],
+  "loom": {
+    "id": "loom",
+    "titleKey": "loom.index.title",
+    "introKey": "loom.index.intro",
+    "availableKey": "loom.status.available",
+    "soonKey": "loom.status.soon",
+    "soonBodyKey": "loom.soonBody",
+    "modules": [
+      {
+        "id": "loom-0",
+        "number": 0,
+        "status": "available",
+        "titleKey": "loom.m0.title",
+        "slug": "loom-0",
+        "summaryKey": "loom.m0.summary",
+        "sections": [
+          {
+            "id": "doing",
+            "headingKey": "loom.sections.doing",
+            "bodyKey": "loom.m0.doing",
+            "parts": [
+              {
+                "id": "pays",
+                "headingKey": "loom.m0.paysTitle",
+                "bodyKey": "loom.m0.pays"
+              }
+            ]
+          },
+          {
+            "id": "why",
+            "headingKey": "loom.sections.why",
+            "bodyKey": "loom.m0.why",
+            "parts": [
+              {
+                "id": "stages",
+                "headingKey": "loom.m0.stagesTitle",
+                "bodyKey": "loom.m0.stages"
+              }
+            ]
+          },
+          {
+            "id": "keywords",
+            "headingKey": "loom.sections.keywords",
+            "keywordKeys": [
+              "loom.m0.keywords.multiTenant",
+              "loom.m0.keywords.tenant",
+              "loom.m0.keywords.platform",
+              "loom.m0.keywords.connectedAccount",
+              "loom.m0.keywords.applicationFee",
+              "loom.m0.keywords.stage"
+            ]
+          },
+          {
+            "id": "worked",
+            "headingKey": "loom.sections.worked",
+            "bodyKey": "loom.m0.worked"
+          }
+        ]
+      },
+      {
+        "id": "loom-1",
+        "number": 1,
+        "status": "available",
+        "titleKey": "loom.m1.title",
+        "slug": "loom-1",
+        "summaryKey": "loom.m1.summary",
+        "sections": [
+          {
+            "id": "doing",
+            "headingKey": "loom.sections.doing",
+            "bodyKey": "loom.m1.doing"
+          },
+          {
+            "id": "why",
+            "headingKey": "loom.sections.why",
+            "bodyKey": "loom.m1.why"
+          },
+          {
+            "id": "keywords",
+            "headingKey": "loom.sections.keywords",
+            "keywordKeys": [
+              "loom.m1.keywords.platform",
+              "loom.m1.keywords.connectedAccount",
+              "loom.m1.keywords.stripeConnect",
+              "loom.m1.keywords.platformProfileReview",
+              "loom.m1.keywords.sandbox",
+              "loom.m1.keywords.directCharge",
+              "loom.m1.keywords.webhook",
+              "loom.m1.keywords.signingSecret",
+              "loom.m1.keywords.kyc"
+            ]
+          },
+          {
+            "id": "worked",
+            "headingKey": "loom.sections.worked",
+            "bodyKey": "loom.m1.worked"
+          }
+        ]
+      },
+      {
+        "id": "loom-2",
+        "number": 2,
+        "status": "soon",
+        "titleKey": "loom.m2.title"
+      },
+      {
+        "id": "loom-3",
+        "number": 3,
+        "status": "soon",
+        "titleKey": "loom.m3.title"
+      },
+      {
+        "id": "loom-4",
+        "number": 4,
+        "status": "soon",
+        "titleKey": "loom.m4.title"
+      },
+      {
+        "id": "loom-5",
+        "number": 5,
+        "status": "soon",
+        "titleKey": "loom.m5.title"
+      },
+      {
+        "id": "loom-6",
+        "number": 6,
+        "status": "available",
+        "titleKey": "loom.m6.title",
+        "slug": "loom-6",
+        "summaryKey": "loom.m6.summary",
+        "sections": [
+          {
+            "id": "doing",
+            "headingKey": "loom.sections.doing",
+            "bodyKey": "loom.m6.doing"
+          },
+          {
+            "id": "why",
+            "headingKey": "loom.sections.why",
+            "bodyKey": "loom.m6.why"
+          },
+          {
+            "id": "keywords",
+            "headingKey": "loom.sections.keywords",
+            "keywordKeys": [
+              "loom.m6.keywords.react",
+              "loom.m6.keywords.typescript",
+              "loom.m6.keywords.vite",
+              "loom.m6.keywords.shadcn",
+              "loom.m6.keywords.api",
+              "loom.m6.keywords.rowLevelSecurity",
+              "loom.m6.keywords.staticSite",
+              "loom.m6.keywords.cors"
+            ]
+          },
+          {
+            "id": "worked",
+            "headingKey": "loom.sections.worked",
+            "bodyKey": "loom.m6.worked"
+          }
+        ]
+      },
+      {
+        "id": "loom-7",
+        "number": 7,
+        "status": "soon",
+        "titleKey": "loom.m7.title"
+      },
+      {
+        "id": "loom-8",
+        "number": 8,
+        "status": "soon",
+        "titleKey": "loom.m8.title"
+      },
+      {
+        "id": "loom-9",
+        "number": 9,
+        "status": "soon",
+        "titleKey": "loom.m9.title"
+      },
+      {
+        "id": "loom-10",
+        "number": 10,
+        "status": "soon",
+        "titleKey": "loom.m10.title"
+      },
+      {
+        "id": "loom-11",
+        "number": 11,
+        "status": "soon",
+        "titleKey": "loom.m11.title"
+      }
+    ]
+  }
 }

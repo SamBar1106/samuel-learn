@@ -285,5 +285,103 @@
         "dueDates": "Recordatorios de fechas límite y prórrogas: un flujo central de la temporada de impuestos."
       }
     }
+  },
+  "loom": {
+    "index": {
+      "title": "Curso Loom: construye un creador de tiendas, paso a paso",
+      "intro": "Loom es el producto que estás construyendo. Este curso sigue las 11 etapas de construcción, un módulo por etapa. Los módulos aparecen cuando empieza cada etapa."
+    },
+    "status": {
+      "available": "Disponible",
+      "soon": "Próximamente"
+    },
+    "soonBody": "La lección llegará cuando empiece esta etapa.",
+    "sections": {
+      "doing": "Lo que estamos haciendo",
+      "why": "Por qué importa",
+      "keywords": "Palabras clave",
+      "worked": "Sabrás que funcionó cuando..."
+    },
+    "m0": {
+      "title": "La visión general",
+      "summary": "Qué es Loom, quién le paga a quién y cómo encajan las 11 etapas.",
+      "doing": "Estamos construyendo Loom, un servicio para crear tiendas. Cada cliente recibe un sitio web de 11 páginas para su negocio, un panel donde administra productos y pedidos, pagos en línea con Stripe y una app para iPhone. Muchos clientes comparten un mismo sistema, y cada uno solo ve sus propios datos. Eso se llama multi-inquilino (multi-tenant).",
+      "paysTitle": "Quién le paga a quién",
+      "pays": "Un comprador le paga a la tienda del cliente. Stripe cobra su propia comisión de tarjeta al cliente. Loom agrega una pequeña comisión de plataforma de 2.175% + 22.5¢ por venta, definida en el código con application_fee_amount. El resto es para el cliente. Cada cliente tiene su propia cuenta de Stripe, así que el cliente es dueño de la relación con el dinero; Loom solo cobra su comisión.",
+      "why": "Saber quién le paga a quién mantiene el producto claro y simple: Loom es software para tiendas, no un banco. Además, Loom no está terminado cuando funcionan el sitio y el panel. Solo está completo cuando la app para iPhone está publicada en la App Store, porque los clientes necesitan manejar su tienda desde el teléfono.",
+      "stagesTitle": "Cómo encajan las 11 etapas",
+      "stages": "1 Configuración de Stripe · 2 Base del backend · 3 Incorporación de clientes · 4 Flujo de pagos · 5 Almacenamiento de imágenes · 6 Panel de control · 7 Sitios de las tiendas · 8 Correo · 9 Lanzamiento y refuerzo · 10 App para iPhone · 11 Envío a la App Store. Las etapas 1–9 construyen el producto web. La etapa 10 empieza cuando las pantallas principales del panel funcionan, porque la app reutiliza el mismo backend. La etapa 11 lleva la app a la App Store.",
+      "keywords": {
+        "multiTenant": "multi-inquilino — un solo sistema que atiende a muchos clientes, y cada uno ve solo sus datos.",
+        "tenant": "inquilino — un cliente (una tienda) dentro del sistema.",
+        "platform": "plataforma — Loom mismo, el servicio sobre el que funcionan las tiendas.",
+        "connectedAccount": "cuenta conectada — la cuenta de Stripe propia de un cliente, vinculada a la plataforma de Loom.",
+        "applicationFee": "comisión de aplicación — la parte que Loom cobra en cada venta (2.175% + 22.5¢).",
+        "stage": "etapa — uno de los 11 pasos para construir Loom."
+      },
+      "worked": "Puedas explicar en dos frases qué es Loom, decir quién le paga a quién en una venta, explicar por qué la App Store es la meta final y nombrar las 11 etapas en orden."
+    },
+    "m1": {
+      "title": "Configuración de la plataforma Stripe",
+      "summary": "Etapa 1: dejar a Loom listo como plataforma Stripe Connect para que los clientes cobren pagos.",
+      "doing": "Creamos la cuenta de Stripe propia de Loom, activamos Stripe Connect y completamos el perfil de plataforma que Stripe revisa. Primero construimos y probamos en el entorno de pruebas (sandbox) de Stripe, con claves de prueba separadas, y no usamos las claves reales hasta que pase la revisión. Activamos la verificación en dos pasos, ponemos nuestro nombre de marca e ícono para las páginas de registro que verán los clientes, y un endpoint de webhook (la forma en que Stripe le avisa a nuestro servidor que pasó algo) que verifica una firma. El plan son cargos directos: la tienda del cliente es la vendedora y Loom agrega su comisión de aplicación. Las plataformas Connect nuevas usan el modelo de cuentas actual de Stripe (Accounts v2), y los clientes reciben el panel completo de Stripe.",
+      "why": "Nada más puede cobrar dinero hasta terminar esta etapa. Stripe revisa la plataforma antes de salir en vivo, y los retrasos comunes son un sitio web que no está activo o no tiene políticas, una descripción del negocio vaga, o un nombre legal que no coincide con los registros de impuestos. Stripe también restringe la \"agregación de pagos\", por eso Loom se presenta como software con cargos directos, donde los clientes mantienen su propia relación con Stripe. Stripe no publica un plazo de revisión, así que nunca prometemos fechas de lanzamiento.",
+      "keywords": {
+        "platform": "plataforma — la cuenta de Stripe de Loom; es la cuenta principal a la que se conectan los clientes.",
+        "connectedAccount": "cuenta conectada — la cuenta de Stripe de un cliente, vinculada a la plataforma.",
+        "stripeConnect": "Stripe Connect — el producto de Stripe para plataformas cuyos usuarios cobran pagos.",
+        "platformProfileReview": "revisión del perfil de plataforma — la verificación de Stripe sobre cómo funciona Loom y a quién atiende, antes de salir en vivo.",
+        "sandbox": "sandbox — el modo de pruebas de Stripe, con dinero ficticio y claves de prueba separadas.",
+        "directCharge": "cargo directo — el pago se hace en la cuenta del cliente; Loom agrega su comisión de aplicación.",
+        "webhook": "webhook — un mensaje que Stripe envía a nuestro servidor cuando ocurre un evento, como un pago exitoso.",
+        "signingSecret": "secreto de firma — un valor privado para comprobar que un webhook realmente viene de Stripe; nunca va en el código ni en el repositorio.",
+        "kyc": "KYC — verificaciones de identidad (\"conoce a tu cliente\") que exige Stripe."
+      },
+      "worked": "Tu cuenta de Stripe esté verificada con la verificación en dos pasos activa, Connect esté habilitado y el perfil de plataforma enviado, y se pueda conectar una cuenta de cliente de prueba en el sandbox. Una venta de prueba en el sandbox debe mostrar la comisión de aplicación además de la comisión propia de Stripe, y un webhook llegue y pase la verificación de firma."
+    },
+    "m2": {
+      "title": "Base del backend"
+    },
+    "m3": {
+      "title": "Incorporación de clientes"
+    },
+    "m4": {
+      "title": "Flujo de pagos"
+    },
+    "m5": {
+      "title": "Almacenamiento de imágenes"
+    },
+    "m6": {
+      "title": "Panel de control",
+      "summary": "Etapa 6: el panel web donde los clientes administran productos y pedidos. Se está construyendo ahora.",
+      "doing": "Estamos construyendo el panel, la pantalla donde un cliente inicia sesión para manejar su tienda. Agrega y edita productos (nombre, precio, inventario, si está publicado) y ve y administra pedidos. Se construye con React y TypeScript, se empaqueta con Vite y usa componentes de shadcn. Habla con el backend de Loom en su propia dirección de API, y los archivos terminados se alojan como sitio estático detrás de Cloudflare. La app para iPhone reutilizará después el mismo backend, por eso primero van las pantallas principales del panel (inicio de sesión, pedidos, productos).",
+      "why": "El panel es donde el cliente ve el valor cada día: productos y pedidos. Debe mostrarle a cada cliente solo sus propios datos, algo que el backend garantiza con un ID de inquilino en cada fila más seguridad a nivel de fila de Postgres. Como el panel es el producto de pago, no se aloja en GitHub Pages, que prohíbe sitios de negocios en línea; se usa Cloudflare. Y un contrato de API estable aquí ahorra trabajo en la etapa 10.",
+      "keywords": {
+        "react": "React — una biblioteca para construir pantallas con piezas reutilizables llamadas componentes.",
+        "typescript": "TypeScript — JavaScript con tipos, para detectar muchos errores antes de ejecutar el código.",
+        "vite": "Vite — la herramienta que ejecuta el servidor de desarrollo y empaqueta la app en archivos estáticos.",
+        "shadcn": "shadcn — un conjunto de componentes de interfaz listos y editables (botones, tablas, formularios).",
+        "api": "API — la forma definida en que el panel le pide datos al backend.",
+        "rowLevelSecurity": "seguridad a nivel de fila — una regla de la base de datos para que cada cliente solo lea sus propias filas.",
+        "staticSite": "sitio estático — archivos HTML/JS/CSS sin código de servidor, fáciles de alojar en una CDN.",
+        "cors": "CORS — una regla del navegador; la API solo acepta solicitudes desde la dirección del propio panel."
+      },
+      "worked": "Un cliente pueda iniciar sesión, ver solo sus propios productos y pedidos, agregar o editar un producto (precio, inventario, publicado) y abrir el detalle de un pedido. Los datos de otro cliente nunca aparezcan, y las pantallas también funcionen en una ventana del tamaño de un teléfono."
+    },
+    "m7": {
+      "title": "Sitios de las tiendas"
+    },
+    "m8": {
+      "title": "Correo electrónico"
+    },
+    "m9": {
+      "title": "Lanzamiento y refuerzo de seguridad"
+    },
+    "m10": {
+      "title": "Construcción de la app para iPhone"
+    },
+    "m11": {
+      "title": "Envío a la App Store y lanzamiento"
+    }
   }
 }

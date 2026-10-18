@@ -5,6 +5,7 @@ import { usePrefersReducedMotion } from '../lib/reducedMotion'
 import { Home } from '../pages/Home'
 import { Lesson } from '../pages/Lesson'
 import { LessonsIndex } from '../pages/LessonsIndex'
+import { LoomIndex } from '../pages/LoomIndex'
 
 export function PageFade() {
   const reduced = usePrefersReducedMotion()
@@ -25,6 +26,8 @@ export function PageFade() {
         <Routes location={location}>
           <Route path="/lessons" element={<LessonsIndex />} />
           <Route path="/lessons/:slug" element={<Lesson />} />
+          <Route path="/loom" element={<LoomIndex />} />
+          <Route path="/loom/:slug" element={<Lesson course="loom" />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </motion.div>

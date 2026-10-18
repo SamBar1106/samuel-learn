@@ -25,6 +25,78 @@ export function lessonAt(slug, pages = content.pages) {
   }
 }
 
+export function loomModulesInOrder(loom = content.loom) {
+  return loom?.modules ?? []
+}
+
+export function loomIndexMeta(loom = content.loom) {
+  return {
+    id: loom.id,
+    titleKey: loom.titleKey,
+    introKey: loom.introKey,
+    availableKey: loom.availableKey,
+    soonKey: loom.soonKey,
+    soonBodyKey: loom.soonBodyKey,
+  }
+}
+
+function availableLoomLessons(loom) {
+  return loomModulesInOrder(loom).filter(
+    (module) => module.status === 'available' && typeof module.slug === 'string' && module.slug !== '',
+  )
+}
+
+export function loomLessonAt(slug, loom = content.loom) {
+  const lessons = availableLoomLessons(loom)
+  const index = lessons.findIndex((module) => module.slug === slug)
+  if (index === -1) return null
+  const previous = lessons[index - 1]
+  const next = lessons[index + 1]
+  return {
+    ...lessons[index],
+    previousSlug: previous?.slug ?? null,
+    previousTitleKey: previous?.titleKey ?? null,
+    nextSlug: next?.slug ?? null,
+    nextTitleKey: next?.titleKey ?? null,
+  }
+}
+
+function pushKey(keys, key) {
+  if (typeof key === 'string' && key !== '') keys.push(key)
+}
+
+export function contentTranslationKeys(source = content) {
+  const keys = []
+  for (const page of source.pages ?? []) {
+    pushKey(keys, page.textKey)
+    pushKey(keys, page.titleKey)
+    pushKey(keys, page.sourceKey)
+    for (const key of page.sectionKeys ?? []) pushKey(keys, key)
+  }
+  const loom = source.loom
+  if (loom) {
+    pushKey(keys, loom.titleKey)
+    pushKey(keys, loom.introKey)
+    pushKey(keys, loom.availableKey)
+    pushKey(keys, loom.soonKey)
+    pushKey(keys, loom.soonBodyKey)
+    for (const module of loom.modules ?? []) {
+      pushKey(keys, module.titleKey)
+      pushKey(keys, module.summaryKey)
+      for (const section of module.sections ?? []) {
+        pushKey(keys, section.headingKey)
+        pushKey(keys, section.bodyKey)
+        for (const part of section.parts ?? []) {
+          pushKey(keys, part.headingKey)
+          pushKey(keys, part.bodyKey)
+        }
+        for (const key of section.keywordKeys ?? []) pushKey(keys, key)
+      }
+    }
+  }
+  return keys
+}
+
 function lessonMethods(pages, source) {
   return {
     async getLesson(slug) {
@@ -38,17 +110,36 @@ function lessonMethods(pages, source) {
   }
 }
 
-function createLocalAdapter(pages) {
+function loomMethods(loom, source) {
+  return {
+    async getLoomIndex() {
+      return { ...loomIndexMeta(loom), source }
+    },
+    async listLoomModules() {
+      return loomModulesInOrder(loom).map((module) => ({ ...module, source }))
+    },
+    async getLoomLesson(slug) {
+      const lesson = loomLessonAt(slug, loom)
+      if (!lesson) throw new Error(`Unknown lesson: ${slug}`)
+      return { ...lesson, source }
+    },
+  }
+}
+
+function createLocalAdapter(pages, loom) {
   return {
     kind: 'local',
     async getPage(id) {
       return readPage(pages, id, 'local')
     },
     ...lessonMethods(pages, 'local'),
+    ...loomMethods(loom, 'local'),
   }
 }
 
-function createSupabaseAdapter(pages, { url, anonKey }) {
+function createSupabaseAdapter(pages, loom, { url, anonKey }) {
+  const lessons = lessonMethods(pages, 'supabase')
+  const loomLessons = loomMethods(loom, 'supabase')
   return {
     kind: 'supabase',
     async getPage(id) {
@@ -58,11 +149,23 @@ function createSupabaseAdapter(pages, { url, anonKey }) {
     },
     async getLesson(slug) {
       if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
-      return lessonMethods(pages, 'supabase').getLesson(slug)
+      return lessons.getLesson(slug)
     },
     async listLessons() {
       if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
-      return lessonMethods(pages, 'supabase').listLessons()
+      return lessons.listLessons()
+    },
+    async getLoomIndex() {
+      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
+      return loomLessons.getLoomIndex()
+    },
+    async listLoomModules() {
+      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
+      return loomLessons.listLoomModules()
+    },
+    async getLoomLesson(slug) {
+      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
+      return loomLessons.getLoomLesson(slug)
     },
   }
 }
@@ -71,11 +174,11 @@ function configured(value) {
   return typeof value === 'string' && value.trim() !== ''
 }
 
-export function chooseAdapter(env = {}, pages = content.pages) {
+export function chooseAdapter(env = {}, pages = content.pages, loom = content.loom) {
   const url = configured(env.VITE_SUPABASE_URL) ? env.VITE_SUPABASE_URL.trim() : ''
   const anonKey = configured(env.VITE_SUPABASE_ANON_KEY) ? env.VITE_SUPABASE_ANON_KEY.trim() : ''
-  if (url && anonKey) return createSupabaseAdapter(pages, { url, anonKey })
-  return createLocalAdapter(pages)
+  if (url && anonKey) return createSupabaseAdapter(pages, loom, { url, anonKey })
+  return createLocalAdapter(pages, loom)
 }
 
 function clientEnv() {

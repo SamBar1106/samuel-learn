@@ -35,6 +35,7 @@ export function Home() {
         <div className="home-intro">
           <h1>{t(page.textKey)}</h1>
           <Link to="/lessons">{t('lessons.index.title')}</Link>
+          <Link to="/loom">{t('loom.index.title')}</Link>
           <Link to="/lessons/component">{t('lesson.component.title')}</Link>
         </div>
       </main>

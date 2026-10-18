@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { contentTranslationKeys } from '../src/lib/data.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const i18nDir = join(root, 'src', 'i18n')
@@ -34,11 +35,7 @@ const esKeys = new Set(flatten(es))
 const enKeys = new Set(flatten(en))
 const missingInEn = [...esKeys].filter((key) => !enKeys.has(key)).sort()
 const missingInEs = [...enKeys].filter((key) => !esKeys.has(key)).sort()
-const contentKeys = (content.pages ?? []).flatMap((page) => {
-  const keys = [page.textKey, page.titleKey, page.sourceKey]
-  if (Array.isArray(page.sectionKeys)) keys.push(...page.sectionKeys)
-  return keys.filter((key) => typeof key === 'string' && key !== '')
-})
+const contentKeys = contentTranslationKeys(content)
 const missingContent = []
 
 for (const key of contentKeys) {

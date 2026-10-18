@@ -84,12 +84,15 @@ main a:focus-visible {
   justify-items: center;
   gap: 1.5rem;
   max-width: min(24rem, 100%);
+  min-width: 0;
   text-align: center;
 }
 
 .home-intro a {
+  max-width: 100%;
   font-size: 1.05rem;
   line-height: 1.45;
+  overflow-wrap: anywhere;
   text-wrap: balance;
 }
 
@@ -109,8 +112,42 @@ main.lesson h1 {
 }
 
 main.lesson article {
+  min-width: 0;
   font-size: 1.125rem;
   line-height: 1.55;
+}
+
+main.lesson[data-course='loom'] h2,
+main.lesson[data-course='loom'] h3,
+main.lesson[data-course='loom'] p {
+  overflow-wrap: anywhere;
+}
+
+main.lesson[data-course='loom'] h2 {
+  margin: 2rem 0 0.65rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+}
+
+main.lesson[data-course='loom'] h3 {
+  margin: 1.35rem 0 0.45rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+main.lesson[data-course='loom'] p:not(.lesson-nav) {
+  margin: 0.55rem 0 0;
+}
+
+main.lesson[data-course='loom'] ul {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
 }
 
 main.lesson ol,
@@ -124,6 +161,7 @@ main.lesson-index ol {
 main.lesson li,
 main.lesson-index li,
 main.lesson-index a,
+main.lesson-index p,
 .lesson-nav a {
   overflow-wrap: anywhere;
 }
@@ -160,6 +198,50 @@ main.lesson-index h1 {
   font-size: 0.95rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
+}
+
+.loom-intro {
+  margin: 0 0 1.75rem;
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+.loom-module-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.75rem;
+  row-gap: 0.35rem;
+  min-width: 0;
+}
+
+.loom-module-title,
+.loom-module-head a {
+  min-width: 0;
+}
+
+.loom-status {
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+}
+
+.loom-module[data-status='soon'] {
+  color: #4a453e;
+}
+
+.loom-module-note {
+  margin: 0.4rem 0 0;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+main.loom-index ol {
+  min-width: 0;
 }
 
 .scroll-room {
