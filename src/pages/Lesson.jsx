@@ -1,50 +1,58 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { data } from '../lib/data'
+import { Link, useParams } from 'react-router-dom'
+import { data, lessonAt } from '../lib/data'
 
-const fallback = {
-  titleKey: 'lesson.component.title',
-  sectionKeys: [
-    'lesson.component.sections.root',
-    'lesson.component.sections.entered',
-    'lesson.component.sections.use1560s',
-    'lesson.component.sections.noun1640s',
-    'lesson.component.sections.adjective1660s',
-    'lesson.component.sections.mechanical1896',
-    'lesson.component.sections.today',
-  ],
-  sourceKey: 'lesson.component.source',
-  sourceUrl: 'https://www.etymonline.com/word/component',
-  source: data.kind,
+function locatedLesson(slug) {
+  const lesson = lessonAt(slug)
+  return lesson ? { ...lesson, source: data.kind } : null
 }
 
 export function Lesson() {
+  const { slug } = useParams()
   const { t, i18n } = useTranslation()
-  const [page, setPage] = useState(fallback)
+  const [page, setPage] = useState(() => locatedLesson(slug))
 
   useEffect(() => {
     let active = true
-    data.getPage('lesson-component-etymology').then(
+    data.getLesson(slug).then(
       (result) => {
         if (active) setPage(result)
       },
       () => {
-        if (active) setPage(fallback)
+        if (active) setPage(null)
       },
     )
     return () => {
       active = false
     }
-  }, [])
+  }, [slug])
 
   useEffect(() => {
-    document.title = t(page.titleKey)
-  }, [t, page.titleKey, i18n.language])
+    document.title = page ? t(page.titleKey) : t('lessons.missing')
+  }, [t, page, i18n.language])
+
+  if (!page) {
+    return (
+      <>
+        <main className="lesson">
+          <p>{t('lessons.missing')}</p>
+          <p className="lesson-nav">
+            <Link to="/lessons">{t('lessons.back')}</Link>
+          </p>
+        </main>
+        <div className="scroll-room" aria-hidden="true" />
+      </>
+    )
+  }
 
   return (
     <>
       <main className="lesson" data-source={page.source}>
         <article>
+          <p className="lesson-nav">
+            <Link to="/lessons">{t('lessons.back')}</Link>
+          </p>
           <h1>{t(page.titleKey)}</h1>
           <ol>
             {page.sectionKeys.map((key) => (
@@ -52,8 +60,22 @@ export function Lesson() {
             ))}
           </ol>
           <p className="lesson-source">
-            <a href={page.sourceUrl}>{t(page.sourceKey)}</a>
+            {page.sourceUrl ? <a href={page.sourceUrl}>{t(page.sourceKey)}</a> : t(page.sourceKey)}
           </p>
+          {page.previousSlug || page.nextSlug ? (
+            <nav className="lesson-nav lesson-nav-end" aria-label={t('lessons.index.title')}>
+              {page.previousSlug ? (
+                <Link to={`/lessons/${page.previousSlug}`}>
+                  {t('lessons.previous')}: {t(page.previousTitleKey)}
+                </Link>
+              ) : null}
+              {page.nextSlug ? (
+                <Link to={`/lessons/${page.nextSlug}`}>
+                  {t('lessons.next')}: {t(page.nextTitleKey)}
+                </Link>
+              ) : null}
+            </nav>
+          ) : null}
         </article>
       </main>
       <div className="scroll-room" aria-hidden="true" />

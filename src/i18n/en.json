@@ -6,7 +6,19 @@
     "es": "ES",
     "en": "EN"
   },
+  "lessons": {
+    "index": {
+      "title": "Lessons"
+    },
+    "back": "All lessons",
+    "previous": "Previous",
+    "next": "Next",
+    "missing": "This lesson is not on the list."
+  },
   "lesson": {
+    "vocab": {
+      "source": "Source: Samuel Barrios technical learning list, October 13, 2026."
+    },
     "component": {
       "title": "Where the word \"Component\" comes from.",
       "source": "Source: Online Etymology Dictionary, https://www.etymonline.com/word/component",
@@ -18,6 +30,259 @@
         "adjective1660s": "1660s: adjective \"constituent, entering into the composition of.\"",
         "mechanical1896": "1896: \"mechanical part of a bicycle, automobile, etc.\"",
         "today": "Today: the same idea of a reusable building block is what React components are."
+      }
+    },
+    "mcp": {
+      "title": "MCP (Model Context Protocol)",
+      "sections": {
+        "what": "What MCP is: an open protocol (started by Anthropic) where MCP servers expose tools, resources and prompts to MCP clients such as Cursor, Claude Code and Grok Bot. It's what turns a chat model into an agent that can act.",
+        "kinds": "Tools / resources / prompts: tools are actions, resources are read-only data and prompts are reusable templates. Knowing which is which lets you design safe, read-only connectors the way Policy 01 requires.",
+        "transports": "Transports (stdio, Streamable HTTP/SSE): this decides whether a server runs on your machine or on sam-erp-cloud-1.",
+        "functionCalling": "How it relates to function calling: each MCP tool is a JSON-Schema-described function. The client turns MCP tools into the model's function-calling list.",
+        "orchestration": "How it relates to orchestration: ED and its workers become far more capable when they share the same MCP servers instead of custom glue code.",
+        "auth": "Auth and scopes (OAuth, tokens, least privilege): connectors act as you, so their scope should be the smallest that works.",
+        "already": "You already use it: GitHub, Google Drive, Calendar, Stitch, Finance and X connectors are MCP namespaces. Your repo's only MCP mention is in tests/test_ai_core_cli.py.",
+        "next": "Next steps: 1. Read the MCP spec quickstart and run the official Python SDK (FastMCP) \"hello\" server. 2. Build a read-only Sam ERP MCP server on top of BOT-API with tools like list_clients, get_ticket and due_dates. 3. Add it to Cursor's mcp.json so Cursor cloud agents can query ERP data. 4. Write it as a ticket for the Claude lane with the usual scope rules. 5. Add tests with MCP Inspector."
+      }
+    },
+    "orchestration": {
+      "title": "AI / agent orchestration",
+      "sections": {
+        "anthropic": "Anthropic: the AI company that makes Claude. Your Claude lane runs Claude Code, so Anthropic's limits, models and docs shape one of your two coding workers.",
+        "dispatcher": "Dispatcher/worker pattern: this is exactly ED → Claude lane / Cursor, so learning it helps you tune your routing.",
+        "queues": "Load balancing and queues: your 2-ticket rule is a basic scheduler, and queue theory will help you improve it.",
+        "routing": "Model routing and model pinning: you pick models by cost, quota and skill. The Antigravity quota burnout shows why this matters.",
+        "hitl": "Human-in-the-loop approvals: these are central to Policy 01.",
+        "handoffs": "Handoffs and result contracts: .result.md outbox files are a handoff protocol, and formalizing them reduces errors.",
+        "subagents": "Subagents and context windows: splitting work keeps each agent focused and cheap.",
+        "limits": "Rate limits and quotas: these explain stalls and failed runs."
+      }
+    },
+    "prompt": {
+      "title": "Prompt engineering",
+      "sections": {
+        "system": "System prompts and standing instructions: your hub is in effect a shared system prompt.",
+        "spec": "Spec-style prompts (scope, constraints, acceptance criteria): your CURSOR tickets already do this, so make it a template.",
+        "fewShot": "Few-shot examples: these raise output consistency for tax and bookkeeping formats.",
+        "structured": "Structured output (JSON mode): lets bots return data your ERP can parse.",
+        "injection": "Prompt injection: emails and web pages can hide instructions, which is a real risk for Claims Hunter and Fix Inbox.",
+        "versioning": "Prompt versioning: keeps changes to the hub auditable."
+      }
+    },
+    "calling": {
+      "title": "Tool use / function calling",
+      "sections": {
+        "calling": "Function calling: how models call your code, and the base layer under MCP.",
+        "schemas": "Tool schemas (JSON Schema): clear parameter schemas mean fewer bad tool calls.",
+        "idempotency": "Idempotency: a retried tool call shouldn't run twice, for example a duplicate payment.",
+        "dryRun": "Dry run / read-only mode: matches your \"read-only toward the outside world\" rule."
+      }
+    },
+    "rag": {
+      "title": "RAG (retrieval-augmented generation)",
+      "sections": {
+        "rag": "RAG: feeds agents your real documents (policies, client PDFs) instead of guesses.",
+        "chunking": "Chunking: how you split PDFs from PDF Studio affects answer quality.",
+        "rerank": "Reranking and hybrid search: keyword plus meaning is best for tax forms and IDs.",
+        "citations": "Citations and grounding: tax answers must point to their source."
+      }
+    },
+    "embeddings": {
+      "title": "Embeddings",
+      "sections": {
+        "embeddings": "Embeddings: text turned into vectors so you can search by meaning, for example \"find similar expense descriptions\".",
+        "cosine": "Cosine similarity: the core math behind semantic search.",
+        "models": "Embedding models and dimensions: these set the cost/quality trade-off."
+      }
+    },
+    "vectors": {
+      "title": "Vector databases",
+      "sections": {
+        "options": "pgvector / SQLite-vec / Chroma / Qdrant: where embeddings live. pgvector fits a FastAPI + Postgres ERP.",
+        "metadata": "Metadata filtering: keeps client A's documents out of client B's answers, which matters for privacy.",
+        "hnsw": "Indexes (HNSW): keep searches fast as data grows."
+      }
+    },
+    "apis": {
+      "title": "APIs",
+      "sections": {
+        "rest": "REST, HTTP methods, status codes (303, 401, 429): you already verified these in hardening.",
+        "openapi": "OpenAPI / FastAPI docs: FastAPI writes API schemas automatically, and agents can read them.",
+        "oauth": "OAuth 2.0 and service accounts: used by your Google Forms import and Drive backups.",
+        "webhooks": "Webhooks: event-driven syncs for the Financial Hub.",
+        "jsonrpc": "JSON-RPC: used by odoo_rpc.py and also by MCP itself.",
+        "pagination": "Pagination, retries and backoff: needed for reliable syncs."
+      }
+    },
+    "web": {
+      "title": "Web automation",
+      "sections": {
+        "scraping": "Scraping (requests, BeautifulSoup): the MGE scraper and the gold-elite raw pages.",
+        "cron": "Cron / schedulers: the MGE VM, Always-Running and due-date reminders.",
+        "robots": "robots.txt and ToS: keep scraping legal.",
+        "gas": "Google Apps Script: onboarding_forms.gs automation."
+      }
+    },
+    "browser": {
+      "title": "Browser automation",
+      "sections": {
+        "playwright": "Playwright: your screenshot QA and QC E2E tool.",
+        "selectors": "Selectors and locators: the reason stable tests pass.",
+        "headless": "Headless browsers, visual regression and screenshot diffing: catch design breaks automatically.",
+        "profiles": "Browser profiles and cookies: know what a logged-in profile can access."
+      }
+    },
+    "files": {
+      "title": "File and code operations",
+      "sections": {
+        "diffs": "Diffs and patches: how you review what agents changed.",
+        "allowlists": "File-scope allowlists: your ticket \"Scope (files allowed)\" rule.",
+        "pdf": "PDF parsing and OCR (pdfplumber, PyMuPDF, Tesseract): the core of tax document intake.",
+        "csv": "CSV/XLSX with pandas/openpyxl: bookkeeping categorization.",
+        "linters": "Linters/formatters (ESLint, Stylelint, ruff): keep agent code consistent."
+      }
+    },
+    "evaluation": {
+      "title": "Evaluation and testing of AI systems",
+      "sections": {
+        "unit": "Unit/integration tests (pytest, Vitest): the pass/fail gate ED uses.",
+        "e2e": "E2E tests: the QC E2E suite.",
+        "evals": "Evals and golden datasets: measure whether the Claims optimizer or Bookkeeper is actually improving.",
+        "selfCheck": "Self-check / self-critique loops: the Bookkeeper self-check, and they need ground truth.",
+        "regression": "Regression, flaky tests and test fixtures: synthetic fixtures protect client data.",
+        "judge": "LLM-as-judge: automated grading, with known biases."
+      }
+    },
+    "security": {
+      "title": "Security and permissions for agents",
+      "sections": {
+        "least": "Least privilege and scoped tokens: limit what each bot can do.",
+        "secrets": "Secrets management (.env, never commit secrets): your tickets already forbid touching these.",
+        "csrf": "CSRF, rate limiting, security headers, default deny: your PR55–59 work.",
+        "breakGlass": "Break-glass access: your emergency path from PR58.",
+        "ssrf": "SSRF / URL guards: your url-guard tests.",
+        "injection": "Prompt injection and data exfiltration: the main new risk with agent tools.",
+        "audit": "Audit logs: prove who did what.",
+        "tailscale": "Tailscale and Funnel: private network vs public exposure. You verified Funnel is off."
+      }
+    },
+    "git": {
+      "title": "Git / GitHub",
+      "sections": {
+        "loop": "Branch → commit → push → PR → review → merge: the loop every ticket follows.",
+        "rebase": "Rebase vs merge, merge conflicts: you'll hit these when parallel agents edit the same files.",
+        "protected": "Protected branches / rulesets: enforce \"never push main\" technically, not only by policy.",
+        "actions": "GitHub Actions, workflows, secrets: your Claude lane runs on these.",
+        "worktrees": "Git worktrees: your wt-task-* folders, so agents can work in parallel without clobbering each other.",
+        "pages": "GitHub Pages: static hosting for sites.",
+        "semver": "Semantic versioning (VERSION) and tags/releases: track what's deployed."
+      }
+    },
+    "languages": {
+      "title": "Coding languages in your repos",
+      "sections": {
+        "python": "Python: the main language of Sam ERP (~5,900 .py files including deps) and division-one-bots (224 .py).",
+        "js": "JavaScript: website interactivity (takeod-site motion, Spline).",
+        "ts": "TypeScript: JavaScript with types, used in sam-erp/frontend. It catches bugs before runtime.",
+        "html": "HTML / Jinja2 templates: page structure. Jinja fills HTML on the server.",
+        "css": "CSS: styling everything you see.",
+        "shell": "Shell (bash): deploy and ops scripts (16 .sh in division-one-bots).",
+        "yaml": "YAML: config for Actions and tickets.",
+        "json": "JSON: data exchange and configs.",
+        "markdown": "Markdown: docs, tickets and the hub.",
+        "gas": "Google Apps Script: JavaScript for Google Workspace (Forms).",
+        "sql": "SQL: the language of your database, to learn alongside the ORM."
+      }
+    },
+    "frontend": {
+      "title": "Front end: React, Vite, CSS",
+      "sections": {
+        "react": "React: a UI library built from components. Sam ERP's frontend uses React + react-router-dom, and you told me samuel-learn uses React + Vite.",
+        "hooks": "Components, props, state, hooks (useState, useEffect): the core React ideas agents write every day.",
+        "jsx": "JSX: HTML-like syntax inside JavaScript.",
+        "vite": "Vite: a fast dev server and bundler (dev server, HMR, vite build → dist/). It's used in sam-erp/frontend and takeod-site.",
+        "vitest": "Vitest: Vite's test runner, already in your frontend.",
+        "css": "CSS basics: styles are rules made of a selector (which elements), properties (what to change) and values (how). Classes are reusable selectors.",
+        "box": "Box model: content + padding + border + margin, the cause of most spacing bugs.",
+        "flex": "Flexbox: one-direction layout (rows/columns).",
+        "grid": "Grid: two-direction layout (page layouts).",
+        "media": "Media queries: responsive design for phone and iPad.",
+        "vars": "Custom properties (--var): CSS variables. This is how design tokens and themes like DRAGON/SCORPIO work.",
+        "cascade": "Cascade and specificity: why one rule beats another.",
+        "cssReact": "CSS in React: className instead of class, CSS Modules (scoped per component), Tailwind utility classes (which you already use), and inline styles for dynamic values.",
+        "tokens": "Design tokens and design systems: keep Stitch mockups and code consistent.",
+        "a11y": "Accessibility (semantic HTML, contrast, focus): usable by everyone, and better for SEO."
+      }
+    },
+    "schemas": {
+      "title": "Schemas and software architecture",
+      "sections": {
+        "schema": "Database schema: tables, columns, types and keys. It's the shape of ERP data.",
+        "migrations": "Migrations: versioned schema changes (docs/MIGRATION.md).",
+        "orm": "ORM (SQLAlchemy etc.): Python objects mapped to tables.",
+        "jsonSchema": "JSON Schema: describes valid JSON, used for configs and tool definitions.",
+        "openapi": "API schemas (OpenAPI): a contract between front end, back end and bots (BOT-API).",
+        "toolSchemas": "Tool schemas: JSON Schema for function calling and MCP tools.",
+        "clientServer": "Frontend / backend, client-server: the browser talks to FastAPI on sam-erp-cloud-1.",
+        "monolith": "Monolith vs microservices: Sam ERP is a modular monolith (app/modules/*), which is right at your size.",
+        "mvc": "MVC / layered architecture, API layer, data model: where code belongs.",
+        "soc": "Separation of concerns: small, focused modules make agent tickets safer to scope.",
+        "factory": "App factory and dependency injection: core_app_factory.py."
+      }
+    },
+    "web3d": {
+      "title": "3D web development",
+      "sections": {
+        "already": "Already in your repos: takeod-site uses gsap, ScrollTrigger, lenis and @splinetool/viewer (Spline 3D on a canvas) in src/motion.js, src/spline.js and src/nav.js. I found no three or @react-three yet.",
+        "scene": "Scene, camera, renderer: the three building blocks of every 3D page.",
+        "camera": "Perspective vs orthographic camera: realistic depth vs flat or isometric looks.",
+        "mesh": "Mesh = geometry + material: the shape plus how it looks.",
+        "pbr": "PBR materials (metalness/roughness): realistic gold and silver, relevant to your jewelry sites.",
+        "textures": "Textures and UVs: how images wrap onto models.",
+        "lighting": "Lighting (ambient, directional, point, spot, environment/HDRI): mood and realism.",
+        "shadows": "Shadows (shadow maps): realism, but expensive on mobile.",
+        "webgl": "WebGL: the browser GPU API under everything. WebGPU is its faster successor.",
+        "three": "Three.js: the standard JS 3D library and the step up from Spline when you need control.",
+        "r3f": "React Three Fiber (R3F): Three.js written as React components, which fits your React stack.",
+        "drei": "drei: ready-made R3F helpers (OrbitControls, useGLTF, Environment).",
+        "useFrame": "useFrame: an R3F hook for per-frame animation.",
+        "gsap": "GSAP timelines and ScrollTrigger: scroll-driven 3D storytelling, which you already use.",
+        "lenis": "Lenis smooth scroll: sync it with ScrollTrigger and the render loop to avoid jitter.",
+        "perf": "Performance basics: draw calls, polycount, texture size and compression (KTX2/Basis), instancing, LOD. These keep mobile and iPad smooth.",
+        "dpr": "devicePixelRatio cap (e.g. max 2) and frameloop=\"demand\": big battery and FPS wins.",
+        "dispose": "Disposing geometries, materials and textures: prevents memory leaks in SPAs.",
+        "compression": "Draco / Meshopt compression: much smaller model downloads.",
+        "glsl": "GLSL shaders: vertex vs fragment shaders, uniforms, varyings and attributes, used for custom effects.",
+        "gltf": "glTF/GLB: the \"JPEG of 3D\" and best for the web. OBJ and FBX are older interchange formats.",
+        "blender": "Blender: free modeling/export tool.",
+        "gltfjsx": "gltfjsx: turns a GLB into an R3F component."
+      }
+    },
+    "servers": {
+      "title": "Servers / Linux / deployment",
+      "sections": {
+        "linux": "Linux shell, permissions, users, systemd services: keep Sam ERP running on sam-erp-cloud-1.",
+        "ssh": "SSH and keys: secure server access.",
+        "uvicorn": "Uvicorn, reverse proxy (Nginx/Caddy), HTTPS/TLS: production serving.",
+        "digitalocean": "DigitalOcean droplets, firewalls, backups/snapshots: your hosting.",
+        "gcp": "Google Cloud VM: the MGE scraper host.",
+        "dns": "DNS: domains, plus the fakedns issue you hit in tests.",
+        "cicd": "CI/CD: auto-test and deploy on merge.",
+        "docker": "Docker: reproducible environments.",
+        "logs": "Logs and monitoring: spot failures early (Always-Running).",
+        "tailscale": "Tailscale: private access without opening ports."
+      }
+    },
+    "domain": {
+      "title": "Domain terms (tax / ERP / finance)",
+      "sections": {
+        "erp": "ERP, CRM, modules: what Sam ERP is.",
+        "odoo": "Odoo, XML-RPC/JSON-RPC: your Odoo bridge.",
+        "books": "Chart of accounts, double-entry, P&L, reconciliation, categorization: Bookkeeper and the P&L work.",
+        "irs": "IRS forms (1040, Schedule C, 1099, W-2), draft return, e-file: Tax Expert work under Policies 02/03, where drafts are never filed.",
+        "claims": "Claims and collections, debts, credit: Financial Hub and Claims Hunter.",
+        "pii": "PII, data retention, client confidentiality: legal duty for tax data.",
+        "dueDates": "Due-date reminders and extensions: a core tax-season workflow."
       }
     }
   }

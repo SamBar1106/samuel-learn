@@ -5,7 +5,325 @@
       "textKey": "page.placeholder"
     },
     {
+      "id": "lessons",
+      "titleKey": "lessons.index.title"
+    },
+    {
+      "id": "lesson-mcp",
+      "slug": "mcp",
+      "titleKey": "lesson.mcp.title",
+      "sectionKeys": [
+        "lesson.mcp.sections.what",
+        "lesson.mcp.sections.kinds",
+        "lesson.mcp.sections.transports",
+        "lesson.mcp.sections.functionCalling",
+        "lesson.mcp.sections.orchestration",
+        "lesson.mcp.sections.auth",
+        "lesson.mcp.sections.already",
+        "lesson.mcp.sections.next"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-agent-orchestration",
+      "slug": "agent-orchestration",
+      "titleKey": "lesson.orchestration.title",
+      "sectionKeys": [
+        "lesson.orchestration.sections.anthropic",
+        "lesson.orchestration.sections.dispatcher",
+        "lesson.orchestration.sections.queues",
+        "lesson.orchestration.sections.routing",
+        "lesson.orchestration.sections.hitl",
+        "lesson.orchestration.sections.handoffs",
+        "lesson.orchestration.sections.subagents",
+        "lesson.orchestration.sections.limits"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-prompt-engineering",
+      "slug": "prompt-engineering",
+      "titleKey": "lesson.prompt.title",
+      "sectionKeys": [
+        "lesson.prompt.sections.system",
+        "lesson.prompt.sections.spec",
+        "lesson.prompt.sections.fewShot",
+        "lesson.prompt.sections.structured",
+        "lesson.prompt.sections.injection",
+        "lesson.prompt.sections.versioning"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-function-calling",
+      "slug": "function-calling",
+      "titleKey": "lesson.calling.title",
+      "sectionKeys": [
+        "lesson.calling.sections.calling",
+        "lesson.calling.sections.schemas",
+        "lesson.calling.sections.idempotency",
+        "lesson.calling.sections.dryRun"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-rag",
+      "slug": "rag",
+      "titleKey": "lesson.rag.title",
+      "sectionKeys": [
+        "lesson.rag.sections.rag",
+        "lesson.rag.sections.chunking",
+        "lesson.rag.sections.rerank",
+        "lesson.rag.sections.citations"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-embeddings",
+      "slug": "embeddings",
+      "titleKey": "lesson.embeddings.title",
+      "sectionKeys": [
+        "lesson.embeddings.sections.embeddings",
+        "lesson.embeddings.sections.cosine",
+        "lesson.embeddings.sections.models"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-vector-databases",
+      "slug": "vector-databases",
+      "titleKey": "lesson.vectors.title",
+      "sectionKeys": [
+        "lesson.vectors.sections.options",
+        "lesson.vectors.sections.metadata",
+        "lesson.vectors.sections.hnsw"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-apis",
+      "slug": "apis",
+      "titleKey": "lesson.apis.title",
+      "sectionKeys": [
+        "lesson.apis.sections.rest",
+        "lesson.apis.sections.openapi",
+        "lesson.apis.sections.oauth",
+        "lesson.apis.sections.webhooks",
+        "lesson.apis.sections.jsonrpc",
+        "lesson.apis.sections.pagination"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-web-automation",
+      "slug": "web-automation",
+      "titleKey": "lesson.web.title",
+      "sectionKeys": [
+        "lesson.web.sections.scraping",
+        "lesson.web.sections.cron",
+        "lesson.web.sections.robots",
+        "lesson.web.sections.gas"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-browser-automation",
+      "slug": "browser-automation",
+      "titleKey": "lesson.browser.title",
+      "sectionKeys": [
+        "lesson.browser.sections.playwright",
+        "lesson.browser.sections.selectors",
+        "lesson.browser.sections.headless",
+        "lesson.browser.sections.profiles"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-file-and-code",
+      "slug": "file-and-code",
+      "titleKey": "lesson.files.title",
+      "sectionKeys": [
+        "lesson.files.sections.diffs",
+        "lesson.files.sections.allowlists",
+        "lesson.files.sections.pdf",
+        "lesson.files.sections.csv",
+        "lesson.files.sections.linters"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-evaluation",
+      "slug": "evaluation",
+      "titleKey": "lesson.evaluation.title",
+      "sectionKeys": [
+        "lesson.evaluation.sections.unit",
+        "lesson.evaluation.sections.e2e",
+        "lesson.evaluation.sections.evals",
+        "lesson.evaluation.sections.selfCheck",
+        "lesson.evaluation.sections.regression",
+        "lesson.evaluation.sections.judge"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-security",
+      "slug": "security",
+      "titleKey": "lesson.security.title",
+      "sectionKeys": [
+        "lesson.security.sections.least",
+        "lesson.security.sections.secrets",
+        "lesson.security.sections.csrf",
+        "lesson.security.sections.breakGlass",
+        "lesson.security.sections.ssrf",
+        "lesson.security.sections.injection",
+        "lesson.security.sections.audit",
+        "lesson.security.sections.tailscale"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-git",
+      "slug": "git",
+      "titleKey": "lesson.git.title",
+      "sectionKeys": [
+        "lesson.git.sections.loop",
+        "lesson.git.sections.rebase",
+        "lesson.git.sections.protected",
+        "lesson.git.sections.actions",
+        "lesson.git.sections.worktrees",
+        "lesson.git.sections.pages",
+        "lesson.git.sections.semver"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-languages",
+      "slug": "languages",
+      "titleKey": "lesson.languages.title",
+      "sectionKeys": [
+        "lesson.languages.sections.python",
+        "lesson.languages.sections.js",
+        "lesson.languages.sections.ts",
+        "lesson.languages.sections.html",
+        "lesson.languages.sections.css",
+        "lesson.languages.sections.shell",
+        "lesson.languages.sections.yaml",
+        "lesson.languages.sections.json",
+        "lesson.languages.sections.markdown",
+        "lesson.languages.sections.gas",
+        "lesson.languages.sections.sql"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-front-end",
+      "slug": "front-end",
+      "titleKey": "lesson.frontend.title",
+      "sectionKeys": [
+        "lesson.frontend.sections.react",
+        "lesson.frontend.sections.hooks",
+        "lesson.frontend.sections.jsx",
+        "lesson.frontend.sections.vite",
+        "lesson.frontend.sections.vitest",
+        "lesson.frontend.sections.css",
+        "lesson.frontend.sections.box",
+        "lesson.frontend.sections.flex",
+        "lesson.frontend.sections.grid",
+        "lesson.frontend.sections.media",
+        "lesson.frontend.sections.vars",
+        "lesson.frontend.sections.cascade",
+        "lesson.frontend.sections.cssReact",
+        "lesson.frontend.sections.tokens",
+        "lesson.frontend.sections.a11y"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-schemas",
+      "slug": "schemas",
+      "titleKey": "lesson.schemas.title",
+      "sectionKeys": [
+        "lesson.schemas.sections.schema",
+        "lesson.schemas.sections.migrations",
+        "lesson.schemas.sections.orm",
+        "lesson.schemas.sections.jsonSchema",
+        "lesson.schemas.sections.openapi",
+        "lesson.schemas.sections.toolSchemas",
+        "lesson.schemas.sections.clientServer",
+        "lesson.schemas.sections.monolith",
+        "lesson.schemas.sections.mvc",
+        "lesson.schemas.sections.soc",
+        "lesson.schemas.sections.factory"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-3d-web",
+      "slug": "3d-web",
+      "titleKey": "lesson.web3d.title",
+      "sectionKeys": [
+        "lesson.web3d.sections.already",
+        "lesson.web3d.sections.scene",
+        "lesson.web3d.sections.camera",
+        "lesson.web3d.sections.mesh",
+        "lesson.web3d.sections.pbr",
+        "lesson.web3d.sections.textures",
+        "lesson.web3d.sections.lighting",
+        "lesson.web3d.sections.shadows",
+        "lesson.web3d.sections.webgl",
+        "lesson.web3d.sections.three",
+        "lesson.web3d.sections.r3f",
+        "lesson.web3d.sections.drei",
+        "lesson.web3d.sections.useFrame",
+        "lesson.web3d.sections.gsap",
+        "lesson.web3d.sections.lenis",
+        "lesson.web3d.sections.perf",
+        "lesson.web3d.sections.dpr",
+        "lesson.web3d.sections.dispose",
+        "lesson.web3d.sections.compression",
+        "lesson.web3d.sections.glsl",
+        "lesson.web3d.sections.gltf",
+        "lesson.web3d.sections.blender",
+        "lesson.web3d.sections.gltfjsx"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-servers",
+      "slug": "servers",
+      "titleKey": "lesson.servers.title",
+      "sectionKeys": [
+        "lesson.servers.sections.linux",
+        "lesson.servers.sections.ssh",
+        "lesson.servers.sections.uvicorn",
+        "lesson.servers.sections.digitalocean",
+        "lesson.servers.sections.gcp",
+        "lesson.servers.sections.dns",
+        "lesson.servers.sections.cicd",
+        "lesson.servers.sections.docker",
+        "lesson.servers.sections.logs",
+        "lesson.servers.sections.tailscale"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
+      "id": "lesson-domain-terms",
+      "slug": "domain-terms",
+      "titleKey": "lesson.domain.title",
+      "sectionKeys": [
+        "lesson.domain.sections.erp",
+        "lesson.domain.sections.odoo",
+        "lesson.domain.sections.books",
+        "lesson.domain.sections.irs",
+        "lesson.domain.sections.claims",
+        "lesson.domain.sections.pii",
+        "lesson.domain.sections.dueDates"
+      ],
+      "sourceKey": "lesson.vocab.source"
+    },
+    {
       "id": "lesson-component-etymology",
+      "slug": "component",
       "titleKey": "lesson.component.title",
       "sectionKeys": [
         "lesson.component.sections.root",

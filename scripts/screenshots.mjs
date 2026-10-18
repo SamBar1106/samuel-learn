@@ -17,6 +17,57 @@ const cases = [
   { lang: 'en', width: 390, height: 844 },
 ]
 
+async function assertNoOverflow(page, label) {
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  )
+  if (overflow > 1) throw new Error(`${label} overflows by ${overflow}px`)
+}
+
+async function shotPage(browser, root, shot) {
+  const width = shot.width ?? 1280
+  const height = shot.height ?? 800
+  const context = await browser.newContext({
+    viewport: { width, height },
+    locale: shot.lang === 'en' ? 'en-US' : 'es-MX',
+    deviceScaleFactor: 1,
+  })
+  await context.addInitScript(
+    ([key, value]) => {
+      localStorage.setItem(key, value)
+    },
+    [LANGUAGE_STORAGE_KEY, shot.lang],
+  )
+  const page = await context.newPage()
+  await page.goto(`${root.replace(/\/$/, '')}/${shot.path}`, { waitUntil: 'networkidle' })
+  await page.locator('[data-page-fade]').waitFor()
+  await page.waitForFunction(() => {
+    const fade = document.querySelector('[data-page-fade]')
+    return fade && Number(getComputedStyle(fade).opacity) > 0.99
+  })
+  const heading = (await page.getByRole('heading').innerText()).trim()
+  const htmlLang = await page.locator('html').getAttribute('lang')
+  if (heading !== shot.heading) throw new Error(`expected ${shot.heading}, got ${heading}`)
+  if (htmlLang !== shot.lang) throw new Error(`expected html lang ${shot.lang}, got ${htmlLang}`)
+  if (shot.path === 'lessons') {
+    const first = (await page.getByRole('listitem').first().innerText()).trim()
+    const mcpTitle = catalogs[shot.lang].lesson.mcp.title
+    if (first !== mcpTitle) throw new Error(`expected MCP first, got ${first}`)
+  }
+  if (shot.path === 'lessons/mcp') {
+    const items = (await page.getByRole('listitem').allInnerTexts()).map((item) => item.replace(/\s+/g, ' ').trim())
+    const sections = Object.values(catalogs[shot.lang].lesson.mcp.sections)
+    if (items.join('|') !== sections.join('|')) {
+      throw new Error(`unexpected MCP sections: ${items.join(' | ')}`)
+    }
+  }
+  await assertNoOverflow(page, `${shot.path} ${shot.lang} ${width}`)
+  if (shot.file) {
+    await page.screenshot({ path: resolve(outDir, shot.file), fullPage: true })
+  }
+  await context.close()
+}
+
 await mkdir(outDir, { recursive: true })
 const browser = await chromium.launch()
 
@@ -48,13 +99,20 @@ try {
       .map((line) => line.trim())
       .filter(Boolean)
       .sort()
-    const expected = ['EN', 'ES', 'PLACEHOLDER', catalogs[lang].lesson.component.title].sort()
+    const expected = [
+      'EN',
+      'ES',
+      'PLACEHOLDER',
+      catalogs[lang].lessons.index.title,
+      catalogs[lang].lesson.component.title,
+    ].sort()
     if (htmlLang !== lang) throw new Error(`expected html lang ${lang}, got ${htmlLang}`)
     if (heading !== 'PLACEHOLDER') throw new Error(`expected PLACEHOLDER, got ${heading}`)
     if (source !== 'local') throw new Error(`expected local data source, got ${source}`)
     if (visible.join('|') !== expected.join('|')) {
       throw new Error(`unexpected visible text: ${visible.join(' | ')}`)
     }
+    await assertNoOverflow(page, `home ${lang} ${width}`)
     await page.screenshot({ path: resolve(outDir, `${lang}-${width}.png`) })
     await context.close()
   }
@@ -114,11 +172,40 @@ try {
       throw new Error(`expected etymonline source, got ${sourceHref}`)
     }
     if (dataSource !== 'local') throw new Error(`expected local data source, got ${dataSource}`)
+    await assertNoOverflow(lessonPage, `component lesson ${lang}`)
     await lessonPage.screenshot({
       path: resolve(outDir, `lesson-${lang}-1280.png`),
       fullPage: true,
     })
     await lessonContext.close()
+  }
+
+  const shots = [
+    { lang: 'en', path: 'lessons', file: 'lessons-index-en-1280.png', heading: en.lessons.index.title },
+    { lang: 'es', path: 'lessons', file: 'lessons-index-es-1280.png', heading: es.lessons.index.title },
+    { lang: 'en', path: 'lessons/mcp', file: 'lesson-mcp-en-1280.png', heading: en.lesson.mcp.title },
+    { lang: 'es', path: 'lessons/mcp', file: 'lesson-mcp-es-1280.png', heading: es.lesson.mcp.title },
+  ]
+  for (const shot of shots) {
+    await shotPage(browser, baseUrl, shot)
+  }
+  for (const width of [390, 768, 1024]) {
+    await shotPage(browser, baseUrl, {
+      lang: 'es',
+      path: 'lessons',
+      heading: es.lessons.index.title,
+      width,
+      height: width === 390 ? 844 : 1024,
+      checkOverflow: true,
+    })
+    await shotPage(browser, baseUrl, {
+      lang: 'en',
+      path: 'lessons/mcp',
+      heading: en.lesson.mcp.title,
+      width,
+      height: width === 390 ? 844 : 1024,
+      checkOverflow: true,
+    })
   }
 
   const reduced = await browser.newContext({
@@ -147,6 +234,16 @@ try {
   if (lessonLenis) throw new Error('Lenis should stay off on the lesson when reduced motion is requested')
   if (lessonOpacity !== '1') {
     throw new Error(`expected full opacity on the lesson under reduced motion, got ${lessonOpacity}`)
+  }
+  await reducedPage.goto(`${baseUrl.replace(/\/$/, '')}/lessons/mcp`, { waitUntil: 'networkidle' })
+  await reducedPage.locator('[data-page-fade]').waitFor()
+  const mcpLenis = await reducedPage.evaluate(() => document.documentElement.classList.contains('lenis'))
+  const mcpOpacity = await reducedPage
+    .locator('[data-page-fade]')
+    .evaluate((node) => getComputedStyle(node).opacity)
+  if (mcpLenis) throw new Error('Lenis should stay off on the MCP lesson when reduced motion is requested')
+  if (mcpOpacity !== '1') {
+    throw new Error(`expected full opacity on the MCP lesson under reduced motion, got ${mcpOpacity}`)
   }
   await reduced.close()
 } finally {

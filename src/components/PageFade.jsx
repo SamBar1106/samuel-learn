@@ -4,6 +4,7 @@ import { Route, Routes, useLocation } from 'react-router-dom'
 import { usePrefersReducedMotion } from '../lib/reducedMotion'
 import { Home } from '../pages/Home'
 import { Lesson } from '../pages/Lesson'
+import { LessonsIndex } from '../pages/LessonsIndex'
 
 export function PageFade() {
   const reduced = usePrefersReducedMotion()
@@ -22,7 +23,8 @@ export function PageFade() {
         transition={{ duration: reduced ? 0 : 0.4, ease: 'easeOut' }}
       >
         <Routes location={location}>
-          <Route path="/lessons/component" element={<Lesson />} />
+          <Route path="/lessons" element={<LessonsIndex />} />
+          <Route path="/lessons/:slug" element={<Lesson />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </motion.div>

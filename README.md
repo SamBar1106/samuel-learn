@@ -2,7 +2,7 @@
 
 Samuel Barrios personal bilingual (Spanish/English) learning website.
 
-Spanish and English are both first-class. Home is still the placeholder page. The first lesson, where the word "component" comes from, is at `/lessons/component`.
+Spanish and English are both first-class. Home links to the lessons index at `/lessons`. Lessons follow the technical learning list, with MCP (Model Context Protocol) first. The component etymology lesson remains at `/lessons/component`.
 
 ## Languages
 
