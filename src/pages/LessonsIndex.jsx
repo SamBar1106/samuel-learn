@@ -35,20 +35,17 @@ export function LessonsIndex() {
   }, [t, page.titleKey, i18n.language])
 
   return (
-    <>
-      <main className="lesson-index" data-source={page.source}>
-        <article>
-          <h1>{t(page.titleKey)}</h1>
-          <ol>
-            {lessons.map((lesson) => (
-              <li key={lesson.slug}>
-                <Link to={`/lessons/${lesson.slug}`}>{t(lesson.titleKey)}</Link>
-              </li>
-            ))}
-          </ol>
-        </article>
-      </main>
-      <div className="scroll-room" aria-hidden="true" />
-    </>
+    <main id="content" className="page lesson-index" data-source={page.source}>
+      <header className="page-intro shell">
+        <h1>{t(page.titleKey)}</h1>
+      </header>
+      <ol className="lesson-index-list shell">
+        {lessons.map((lesson) => (
+          <li key={lesson.slug}>
+            <Link to={`/lessons/${lesson.slug}`}>{t(lesson.titleKey)}</Link>
+          </li>
+        ))}
+      </ol>
+    </main>
   )
 }

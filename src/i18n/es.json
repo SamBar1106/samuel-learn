@@ -1,6 +1,6 @@
 {
   "page": {
-    "placeholder": "PLACEHOLDER"
+    "placeholder": "[Placeholder]"
   },
   "language": {
     "es": "ES",
@@ -284,6 +284,70 @@
         "pii": "PII, retención de datos, confidencialidad del cliente: deber legal sobre los datos fiscales.",
         "dueDates": "Recordatorios de fechas límite y prórrogas: un flujo central de la temporada de impuestos."
       }
+    },
+    "area": "Área",
+    "overview": "Resumen de lecciones",
+    "reactName": "React"
+  },
+  "nav": {
+    "lessons": "Lecciones",
+    "areas": "Áreas",
+    "about": "Acerca de",
+    "start": "Empezar a aprender",
+    "menu": "Menú",
+    "close": "Cerrar",
+    "github": "GitHub",
+    "skip": "Saltar al contenido",
+    "primary": "Principal",
+    "footer": "Pie"
+  },
+  "home": {
+    "eyebrow": "Currículo interactivo bilingüe",
+    "titleLead": "Aprender",
+    "titleAccent": "construyendo",
+    "startLesson": "Empezar la primera lección",
+    "explore": "Explorar {{count}} áreas",
+    "startHere": "Empieza aquí",
+    "lessonNumber": "Lección #01",
+    "firstLesson": "Primera lección",
+    "readLesson": "Leer lección",
+    "curriculum": "Currículo",
+    "lessonAreas": "Áreas de lecciones",
+    "areaCount": "{{count}} áreas",
+    "bilingual": "EN / ES"
+  },
+  "areas": {
+    "eyebrow": "Catálogo de áreas",
+    "title": "Áreas de lecciones",
+    "git": {
+      "title": "Git y GitHub"
+    },
+    "agents": {
+      "title": "Dirigir agentes de código con IA"
+    },
+    "mcp": {
+      "title": "MCP"
+    },
+    "anthropic": {
+      "title": "Anthropic"
+    },
+    "react": {
+      "title": "React"
+    },
+    "css": {
+      "title": "CSS"
+    },
+    "languages": {
+      "title": "Lenguajes"
+    },
+    "schemas": {
+      "title": "Esquemas y arquitectura"
+    },
+    "web3d": {
+      "title": "Web 3D"
     }
+  },
+  "about": {
+    "title": "Acerca de"
   }
 }

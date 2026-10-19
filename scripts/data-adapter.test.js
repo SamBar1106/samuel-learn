@@ -38,8 +38,27 @@ test('passes lesson title, sections, and source through', async () => {
     ],
     sourceKey: 'lesson.component.source',
     sourceUrl: 'https://www.etymonline.com/word/component',
+    path: '/lessons/component',
+    areaId: 'react',
     source: 'local',
   })
+})
+
+test('lists the nine areas and keeps the component lesson on React', async () => {
+  const areas = await chooseAdapter({}).listAreas()
+  assert.equal(areas.length, 9)
+  assert.deepEqual(
+    areas.map((area) => area.id),
+    ['git-github', 'agents', 'mcp', 'anthropic', 'react', 'css', 'languages', 'schemas', 'web3d'],
+  )
+  const react = areas.find((area) => area.id === 'react')
+  assert.equal(react.lessonId, 'lesson-component-etymology')
+  assert.deepEqual(areas.find((area) => area.id === 'web3d').topics, [
+    'Three.js',
+    'React Three Fiber',
+    'GSAP',
+    'Lenis',
+  ])
 })
 
 test('selects the supabase stub only when both variables are set and does not fetch', async () => {
@@ -61,6 +80,7 @@ test('selects the supabase stub only when both variables are set and does not fe
       textKey: 'page.placeholder',
       source: 'supabase',
     })
+    assert.equal((await adapter.listAreas()).length, 9)
     assert.equal(called, false)
   } finally {
     globalThis.fetch = original

@@ -322,6 +322,16 @@
       "sourceKey": "lesson.vocab.source"
     },
     {
+      "id": "areas",
+      "titleKey": "areas.title",
+      "textKey": "page.placeholder"
+    },
+    {
+      "id": "about",
+      "titleKey": "about.title",
+      "textKey": "page.placeholder"
+    },
+    {
       "id": "lesson-component-etymology",
       "slug": "component",
       "titleKey": "lesson.component.title",
@@ -335,7 +345,72 @@
         "lesson.component.sections.today"
       ],
       "sourceKey": "lesson.component.source",
-      "sourceUrl": "https://www.etymonline.com/word/component"
+      "sourceUrl": "https://www.etymonline.com/word/component",
+      "path": "/lessons/component",
+      "areaId": "react"
+    }
+  ],
+  "areas": [
+    {
+      "id": "git-github",
+      "number": "01",
+      "titleKey": "areas.git.title",
+      "summaryKey": "page.placeholder"
+    },
+    {
+      "id": "agents",
+      "number": "02",
+      "titleKey": "areas.agents.title",
+      "summaryKey": "page.placeholder"
+    },
+    {
+      "id": "mcp",
+      "number": "03",
+      "titleKey": "areas.mcp.title",
+      "summaryKey": "page.placeholder"
+    },
+    {
+      "id": "anthropic",
+      "number": "04",
+      "titleKey": "areas.anthropic.title",
+      "summaryKey": "page.placeholder"
+    },
+    {
+      "id": "react",
+      "number": "05",
+      "titleKey": "areas.react.title",
+      "summaryKey": "page.placeholder",
+      "lessonId": "lesson-component-etymology"
+    },
+    {
+      "id": "css",
+      "number": "06",
+      "titleKey": "areas.css.title",
+      "summaryKey": "page.placeholder"
+    },
+    {
+      "id": "languages",
+      "number": "07",
+      "titleKey": "areas.languages.title",
+      "summaryKey": "page.placeholder"
+    },
+    {
+      "id": "schemas",
+      "number": "08",
+      "titleKey": "areas.schemas.title",
+      "summaryKey": "page.placeholder"
+    },
+    {
+      "id": "web3d",
+      "number": "09",
+      "titleKey": "areas.web3d.title",
+      "summaryKey": "page.placeholder",
+      "topics": [
+        "Three.js",
+        "React Three Fiber",
+        "GSAP",
+        "Lenis"
+      ]
     }
   ]
 }
