@@ -6,6 +6,289 @@
     "es": "ES",
     "en": "EN"
   },
+  "lessons": {
+    "index": {
+      "title": "Lecciones"
+    },
+    "back": "Todas las lecciones",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "missing": "Esta lección no está en la lista."
+  },
+  "lesson": {
+    "vocab": {
+      "source": "Fuente: lista técnica de aprendizaje de Samuel Barrios, 13 de octubre de 2026."
+    },
+    "component": {
+      "title": "De dónde viene la palabra «Component».",
+      "source": "Fuente: Online Etymology Dictionary, https://www.etymonline.com/word/component",
+      "sections": {
+        "root": "Desglose de la raíz: latín componere «juntar, reunir un todo a partir de varias partes» = com («con, juntos») + ponere («colocar»). Literalmente, «algo colocado junto con otros» para formar un todo.",
+        "entered": "Entró en el inglés desde el latín componentem (nominativo componens), participio de presente de componere.",
+        "use1560s": "Primer uso registrado, década de 1560: «uno de un grupo de personas».",
+        "noun1640s": "Década de 1640: «parte o elemento constitutivo» (sustantivo).",
+        "adjective1660s": "Década de 1660: adjetivo «constitutivo, que entra en la composición de».",
+        "mechanical1896": "1896: «parte mecánica de una bicicleta, un automóvil, etc.».",
+        "today": "Hoy: la misma idea de un bloque de construcción reutilizable es lo que son los componentes de React."
+      }
+    },
+    "mcp": {
+      "title": "MCP (Model Context Protocol)",
+      "sections": {
+        "what": "Qué es MCP: un protocolo abierto (iniciado por Anthropic) en el que los servidores MCP exponen herramientas, recursos y prompts a clientes MCP como Cursor, Claude Code y Grok Bot. Es lo que convierte un modelo de chat en un agente que puede actuar.",
+        "kinds": "Herramientas / recursos / prompts: las herramientas son acciones, los recursos son datos de solo lectura y los prompts son plantillas reutilizables. Saber cuál es cuál te permite diseñar conectores seguros y de solo lectura, como exige la Policy 01.",
+        "transports": "Transportes (stdio, Streamable HTTP/SSE): esto decide si un servidor corre en tu máquina o en sam-erp-cloud-1.",
+        "functionCalling": "Cómo se relaciona con la llamada a funciones: cada herramienta MCP es una función descrita con JSON Schema. El cliente convierte las herramientas MCP en la lista de llamada a funciones del modelo.",
+        "orchestration": "Cómo se relaciona con la orquestación: ED y sus workers se vuelven mucho más capaces cuando comparten los mismos servidores MCP en lugar de código de pegamento a medida.",
+        "auth": "Autenticación y alcances (OAuth, tokens, mínimo privilegio): los conectores actúan como tú, así que su alcance debe ser el más pequeño que funcione.",
+        "already": "Ya lo usas: los conectores de GitHub, Google Drive, Calendar, Stitch, Finance y X son espacios de nombres MCP. La única mención de MCP en tu repositorio está en tests/test_ai_core_cli.py.",
+        "next": "Próximos pasos: 1. Lee el quickstart de la especificación de MCP y ejecuta el servidor «hello» del SDK oficial de Python (FastMCP). 2. Construye un servidor MCP de solo lectura de Sam ERP sobre BOT-API con herramientas como list_clients, get_ticket y due_dates. 3. Agrégalo al mcp.json de Cursor para que los agentes en la nube de Cursor puedan consultar datos del ERP. 4. Escríbelo como un ticket para el carril de Claude con las reglas de alcance de siempre. 5. Agrega pruebas con MCP Inspector."
+      }
+    },
+    "orchestration": {
+      "title": "Orquestación de IA y agentes",
+      "sections": {
+        "anthropic": "Anthropic: la empresa de IA que hace Claude. Tu carril de Claude ejecuta Claude Code, así que los límites, los modelos y la documentación de Anthropic dan forma a uno de tus dos workers de código.",
+        "dispatcher": "Patrón despachador/worker: esto es exactamente ED → carril de Claude / Cursor, así que aprenderlo te ayuda a afinar tu enrutamiento.",
+        "queues": "Balanceo de carga y colas: tu regla de 2 tickets es un planificador básico, y la teoría de colas te ayudará a mejorarla.",
+        "routing": "Enrutamiento de modelos y fijación de modelo: eliges modelos por costo, cuota y habilidad. El agotamiento de cuota de Antigravity muestra por qué importa.",
+        "hitl": "Aprobaciones con una persona en el ciclo: son centrales para la Policy 01.",
+        "handoffs": "Entregas y contratos de resultado: los archivos .result.md del outbox son un protocolo de entrega, y formalizarlos reduce errores.",
+        "subagents": "Subagentes y ventanas de contexto: dividir el trabajo mantiene a cada agente enfocado y barato.",
+        "limits": "Límites de tasa y cuotas: explican los atascos y las ejecuciones fallidas."
+      }
+    },
+    "prompt": {
+      "title": "Ingeniería de prompts",
+      "sections": {
+        "system": "Prompts de sistema e instrucciones permanentes: tu hub es, en la práctica, un prompt de sistema compartido.",
+        "spec": "Prompts al estilo de especificación (alcance, restricciones, criterios de aceptación): tus tickets de CURSOR ya hacen esto, así que conviértelo en una plantilla.",
+        "fewShot": "Ejemplos few-shot: aumentan la consistencia del resultado en formatos de impuestos y contabilidad.",
+        "structured": "Salida estructurada (modo JSON): permite que los bots devuelvan datos que tu ERP puede interpretar.",
+        "injection": "Inyección de prompts: los correos y las páginas web pueden esconder instrucciones, y es un riesgo real para Claims Hunter y Fix Inbox.",
+        "versioning": "Versionado de prompts: mantiene auditables los cambios del hub."
+      }
+    },
+    "calling": {
+      "title": "Uso de herramientas y llamada a funciones",
+      "sections": {
+        "calling": "Llamada a funciones: cómo los modelos llaman a tu código, y la capa base debajo de MCP.",
+        "schemas": "Esquemas de herramientas (JSON Schema): unos esquemas de parámetros claros significan menos llamadas mal hechas.",
+        "idempotency": "Idempotencia: una llamada reintentada no debería ejecutarse dos veces, por ejemplo un pago duplicado.",
+        "dryRun": "Simulación / modo de solo lectura: coincide con tu regla de «solo lectura hacia el mundo exterior»."
+      }
+    },
+    "rag": {
+      "title": "RAG (generación aumentada por recuperación)",
+      "sections": {
+        "rag": "RAG: alimenta a los agentes con tus documentos reales (políticas, PDFs de clientes) en lugar de conjeturas.",
+        "chunking": "Fragmentación: cómo partes los PDFs de PDF Studio afecta la calidad de las respuestas.",
+        "rerank": "Reordenamiento y búsqueda híbrida: palabra clave más significado es lo mejor para formularios fiscales e identificadores.",
+        "citations": "Citas y anclaje: las respuestas de impuestos deben señalar su fuente."
+      }
+    },
+    "embeddings": {
+      "title": "Embeddings",
+      "sections": {
+        "embeddings": "Embeddings: texto convertido en vectores para buscar por significado, por ejemplo «encontrar descripciones de gastos parecidas».",
+        "cosine": "Similitud del coseno: la matemática central de la búsqueda semántica.",
+        "models": "Modelos de embeddings y dimensiones: fijan el equilibrio entre costo y calidad."
+      }
+    },
+    "vectors": {
+      "title": "Bases de datos vectoriales",
+      "sections": {
+        "options": "pgvector / SQLite-vec / Chroma / Qdrant: donde viven los embeddings. pgvector encaja en un ERP con FastAPI y Postgres.",
+        "metadata": "Filtrado por metadatos: mantiene los documentos del cliente A fuera de las respuestas del cliente B, lo que importa para la privacidad.",
+        "hnsw": "Índices (HNSW): mantienen las búsquedas rápidas a medida que crecen los datos."
+      }
+    },
+    "apis": {
+      "title": "APIs",
+      "sections": {
+        "rest": "REST, métodos HTTP, códigos de estado (303, 401, 429): ya los verificaste en el endurecimiento.",
+        "openapi": "OpenAPI / documentación de FastAPI: FastAPI escribe los esquemas de la API automáticamente, y los agentes pueden leerlos.",
+        "oauth": "OAuth 2.0 y cuentas de servicio: los usan tu importación de Google Forms y las copias de seguridad de Drive.",
+        "webhooks": "Webhooks: sincronizaciones por eventos para el Financial Hub.",
+        "jsonrpc": "JSON-RPC: lo usa odoo_rpc.py y también el propio MCP.",
+        "pagination": "Paginación, reintentos y espera creciente: hacen falta para sincronizaciones fiables."
+      }
+    },
+    "web": {
+      "title": "Automatización web",
+      "sections": {
+        "scraping": "Scraping (requests, BeautifulSoup): el scraper de MGE y las páginas en bruto de gold-elite.",
+        "cron": "Cron / planificadores: la VM de MGE, Always-Running y los recordatorios de fechas límite.",
+        "robots": "robots.txt y términos de servicio: mantienen el scraping dentro de la ley.",
+        "gas": "Google Apps Script: la automatización de onboarding_forms.gs."
+      }
+    },
+    "browser": {
+      "title": "Automatización de navegadores",
+      "sections": {
+        "playwright": "Playwright: tu herramienta de QA por capturas y de QC E2E.",
+        "selectors": "Selectores y localizadores: la razón por la que las pruebas estables pasan.",
+        "headless": "Navegadores headless, regresión visual y diff de capturas: detectan roturas de diseño automáticamente.",
+        "profiles": "Perfiles de navegador y cookies: saber a qué puede acceder un perfil con sesión iniciada."
+      }
+    },
+    "files": {
+      "title": "Operaciones de archivos y código",
+      "sections": {
+        "diffs": "Diffs y parches: cómo revisas lo que cambiaron los agentes.",
+        "allowlists": "Listas de archivos permitidos: tu regla de ticket «Scope (files allowed)».",
+        "pdf": "Análisis de PDF y OCR (pdfplumber, PyMuPDF, Tesseract): el núcleo de la entrada de documentos fiscales.",
+        "csv": "CSV/XLSX con pandas/openpyxl: categorización de contabilidad.",
+        "linters": "Linters y formateadores (ESLint, Stylelint, ruff): mantienen consistente el código de los agentes."
+      }
+    },
+    "evaluation": {
+      "title": "Evaluación y pruebas de sistemas de IA",
+      "sections": {
+        "unit": "Pruebas unitarias y de integración (pytest, Vitest): la compuerta de aprobado o reprobado que usa ED.",
+        "e2e": "Pruebas E2E: la suite QC E2E.",
+        "evals": "Evaluaciones y conjuntos dorados: miden si el optimizador de Claims o Bookkeeper está mejorando de verdad.",
+        "selfCheck": "Bucles de autocomprobación y autocrítica: la autocomprobación de Bookkeeper, y necesitan una verdad de referencia.",
+        "regression": "Regresión, pruebas inestables y fixtures de prueba: los fixtures sintéticos protegen los datos de los clientes.",
+        "judge": "LLM como juez: calificación automática, con sesgos conocidos."
+      }
+    },
+    "security": {
+      "title": "Seguridad y permisos para agentes",
+      "sections": {
+        "least": "Mínimo privilegio y tokens con alcance: limitan lo que puede hacer cada bot.",
+        "secrets": "Gestión de secretos (.env, nunca subas secretos al repositorio): tus tickets ya prohíben tocarlos.",
+        "csrf": "CSRF, límite de tasa, cabeceras de seguridad, denegación por defecto: tu trabajo de PR55–59.",
+        "breakGlass": "Acceso de emergencia (break-glass): tu vía de emergencia del PR58.",
+        "ssrf": "SSRF / guardas de URL: tus pruebas de url-guard.",
+        "injection": "Inyección de prompts y exfiltración de datos: el principal riesgo nuevo con las herramientas de agentes.",
+        "audit": "Registros de auditoría: demuestran quién hizo qué.",
+        "tailscale": "Tailscale y Funnel: red privada frente a exposición pública. Verificaste que Funnel está apagado."
+      }
+    },
+    "git": {
+      "title": "Git / GitHub",
+      "sections": {
+        "loop": "Rama → commit → push → PR → revisión → merge: el ciclo que sigue cada ticket.",
+        "rebase": "Rebase frente a merge, conflictos de merge: los verás cuando agentes en paralelo editen los mismos archivos.",
+        "protected": "Ramas protegidas / rulesets: hacen cumplir «nunca hagas push a main» de forma técnica, no solo por política.",
+        "actions": "GitHub Actions, workflows, secrets: tu carril de Claude corre sobre esto.",
+        "worktrees": "Git worktrees: tus carpetas wt-task-*, para que los agentes trabajen en paralelo sin pisarse.",
+        "pages": "GitHub Pages: alojamiento estático para sitios.",
+        "semver": "Versionado semántico (VERSION) y tags/releases: registran qué está desplegado."
+      }
+    },
+    "languages": {
+      "title": "Lenguajes de código en tus repositorios",
+      "sections": {
+        "python": "Python: el lenguaje principal de Sam ERP (~5.900 archivos .py, dependencias incluidas) y de division-one-bots (224 .py).",
+        "js": "JavaScript: interactividad de los sitios (movimiento de takeod-site, Spline).",
+        "ts": "TypeScript: JavaScript con tipos, usado en sam-erp/frontend. Atrapa errores antes de la ejecución.",
+        "html": "Plantillas HTML / Jinja2: la estructura de la página. Jinja rellena el HTML en el servidor.",
+        "css": "CSS: el estilo de todo lo que ves.",
+        "shell": "Shell (bash): scripts de despliegue y operaciones (16 .sh en division-one-bots).",
+        "yaml": "YAML: configuración de Actions y de tickets.",
+        "json": "JSON: intercambio de datos y configuraciones.",
+        "markdown": "Markdown: documentación, tickets y el hub.",
+        "gas": "Google Apps Script: JavaScript para Google Workspace (Forms).",
+        "sql": "SQL: el lenguaje de tu base de datos, para aprender junto al ORM."
+      }
+    },
+    "frontend": {
+      "title": "Front end: React, Vite y CSS",
+      "sections": {
+        "react": "React: una biblioteca de interfaz hecha de componentes. El frontend de Sam ERP usa React y react-router-dom, y me dijiste que samuel-learn usa React y Vite.",
+        "hooks": "Componentes, props, estado, hooks (useState, useEffect): las ideas centrales de React que los agentes escriben cada día.",
+        "jsx": "JSX: sintaxis parecida a HTML dentro de JavaScript.",
+        "vite": "Vite: un servidor de desarrollo y empaquetador rápido (servidor de desarrollo, HMR, vite build → dist/). Se usa en sam-erp/frontend y en takeod-site.",
+        "vitest": "Vitest: el ejecutor de pruebas de Vite, ya presente en tu frontend.",
+        "css": "Bases de CSS: los estilos son reglas hechas de un selector (qué elementos), propiedades (qué cambiar) y valores (cómo). Las clases son selectores reutilizables.",
+        "box": "Modelo de caja: contenido + padding + borde + margen, la causa de la mayoría de los errores de espaciado.",
+        "flex": "Flexbox: maquetación en una dirección (filas/columnas).",
+        "grid": "Grid: maquetación en dos direcciones (maquetas de página).",
+        "media": "Media queries: diseño adaptable para teléfono y iPad.",
+        "vars": "Propiedades personalizadas (--var): variables de CSS. Así funcionan los design tokens y temas como DRAGON/SCORPIO.",
+        "cascade": "Cascada y especificidad: por qué una regla gana a otra.",
+        "cssReact": "CSS en React: className en lugar de class, CSS Modules (con alcance por componente), clases de utilidad de Tailwind (que ya usas) y estilos en línea para valores dinámicos.",
+        "tokens": "Design tokens y sistemas de diseño: mantienen coherentes las maquetas de Stitch y el código.",
+        "a11y": "Accesibilidad (HTML semántico, contraste, foco): usable por todas las personas, y mejor para el SEO."
+      }
+    },
+    "schemas": {
+      "title": "Esquemas y arquitectura de software",
+      "sections": {
+        "schema": "Esquema de base de datos: tablas, columnas, tipos y claves. Es la forma de los datos del ERP.",
+        "migrations": "Migraciones: cambios de esquema versionados (docs/MIGRATION.md).",
+        "orm": "ORM (SQLAlchemy, etc.): objetos de Python asociados a tablas.",
+        "jsonSchema": "JSON Schema: describe JSON válido, usado en configuraciones y definiciones de herramientas.",
+        "openapi": "Esquemas de API (OpenAPI): un contrato entre el front end, el back end y los bots (BOT-API).",
+        "toolSchemas": "Esquemas de herramientas: JSON Schema para la llamada a funciones y las herramientas MCP.",
+        "clientServer": "Frontend / backend, cliente-servidor: el navegador habla con FastAPI en sam-erp-cloud-1.",
+        "monolith": "Monolito frente a microservicios: Sam ERP es un monolito modular (app/modules/*), lo correcto a tu tamaño.",
+        "mvc": "MVC / arquitectura por capas, capa de API, modelo de datos: dónde pertenece el código.",
+        "soc": "Separación de responsabilidades: módulos pequeños y enfocados hacen más seguro acotar los tickets de los agentes.",
+        "factory": "App factory e inyección de dependencias: core_app_factory.py."
+      }
+    },
+    "web3d": {
+      "title": "Desarrollo web 3D",
+      "sections": {
+        "already": "Ya en tus repositorios: takeod-site usa gsap, ScrollTrigger, lenis y @splinetool/viewer (Spline 3D en un canvas) en src/motion.js, src/spline.js y src/nav.js. No encontré three ni @react-three todavía.",
+        "scene": "Escena, cámara, renderizador: los tres bloques de toda página 3D.",
+        "camera": "Cámara en perspectiva frente a ortográfica: profundidad realista frente a un aspecto plano o isométrico.",
+        "mesh": "Malla = geometría + material: la forma y cómo se ve.",
+        "pbr": "Materiales PBR (metalness/roughness): oro y plata realistas, relevantes para tus sitios de joyería.",
+        "textures": "Texturas y UVs: cómo las imágenes se envuelven sobre los modelos.",
+        "lighting": "Iluminación (ambiental, direccional, puntual, focal, entorno/HDRI): ambiente y realismo.",
+        "shadows": "Sombras (shadow maps): realismo, pero caras en el móvil.",
+        "webgl": "WebGL: la API de GPU del navegador que está debajo de todo. WebGPU es su sucesora, más rápida.",
+        "three": "Three.js: la biblioteca 3D estándar de JS y el paso siguiente a Spline cuando necesitas control.",
+        "r3f": "React Three Fiber (R3F): Three.js escrito como componentes de React, lo que encaja con tu stack de React.",
+        "drei": "drei: ayudas listas de R3F (OrbitControls, useGLTF, Environment).",
+        "useFrame": "useFrame: un hook de R3F para animación por fotograma.",
+        "gsap": "Líneas de tiempo de GSAP y ScrollTrigger: narrativa 3D guiada por el scroll, que ya usas.",
+        "lenis": "Scroll suave de Lenis: sincronízalo con ScrollTrigger y el bucle de render para evitar tirones.",
+        "perf": "Bases de rendimiento: draw calls, número de polígonos, tamaño y compresión de texturas (KTX2/Basis), instancing, LOD. Mantienen fluidos el móvil y el iPad.",
+        "dpr": "Tope de devicePixelRatio (por ejemplo, máximo 2) y frameloop=\"demand\": grandes ganancias de batería y de FPS.",
+        "dispose": "Liberar geometrías, materiales y texturas: evita fugas de memoria en las SPA.",
+        "compression": "Compresión Draco / Meshopt: descargas de modelos mucho más pequeñas.",
+        "glsl": "Shaders GLSL: shaders de vértices frente a shaders de fragmentos, uniforms, varyings y attributes, usados para efectos a medida.",
+        "gltf": "glTF/GLB: el «JPEG del 3D» y lo mejor para la web. OBJ y FBX son formatos de intercambio más antiguos.",
+        "blender": "Blender: herramienta gratuita de modelado y exportación.",
+        "gltfjsx": "gltfjsx: convierte un GLB en un componente de R3F."
+      }
+    },
+    "servers": {
+      "title": "Servidores, Linux y despliegue",
+      "sections": {
+        "linux": "Shell de Linux, permisos, usuarios, servicios de systemd: mantienen Sam ERP en marcha en sam-erp-cloud-1.",
+        "ssh": "SSH y claves: acceso seguro al servidor.",
+        "uvicorn": "Uvicorn, proxy inverso (Nginx/Caddy), HTTPS/TLS: servicio en producción.",
+        "digitalocean": "Droplets de DigitalOcean, cortafuegos, copias de seguridad y snapshots: tu alojamiento.",
+        "gcp": "VM de Google Cloud: el host del scraper de MGE.",
+        "dns": "DNS: dominios, más el problema de fakedns que viste en las pruebas.",
+        "cicd": "CI/CD: probar y desplegar automáticamente al hacer merge.",
+        "docker": "Docker: entornos reproducibles.",
+        "logs": "Registros y monitoreo: detectan fallos pronto (Always-Running).",
+        "tailscale": "Tailscale: acceso privado sin abrir puertos."
+      }
+    },
+    "domain": {
+      "title": "Términos del dominio (impuestos, ERP y finanzas)",
+      "sections": {
+        "erp": "ERP, CRM, módulos: lo que es Sam ERP.",
+        "odoo": "Odoo, XML-RPC/JSON-RPC: tu puente con Odoo.",
+        "books": "Plan de cuentas, partida doble, P&L, conciliación, categorización: Bookkeeper y el trabajo de P&L.",
+        "irs": "Formularios del IRS (1040, Schedule C, 1099, W-2), declaración en borrador, e-file: trabajo del Tax Expert bajo las Policies 02/03, donde los borradores nunca se presentan.",
+        "claims": "Reclamaciones y cobros, deudas, crédito: Financial Hub y Claims Hunter.",
+        "pii": "PII, retención de datos, confidencialidad del cliente: deber legal sobre los datos fiscales.",
+        "dueDates": "Recordatorios de fechas límite y prórrogas: un flujo central de la temporada de impuestos."
+      }
+    },
+    "area": "Área",
+    "overview": "Resumen de lecciones",
+    "reactName": "React"
+  },
   "nav": {
     "lessons": "Lecciones",
     "areas": "Áreas",
@@ -36,32 +319,32 @@
   "areas": {
     "eyebrow": "Catálogo de áreas",
     "title": "Áreas de lecciones",
-    "git": { "title": "Git y GitHub" },
-    "agents": { "title": "Dirigir agentes de código con IA" },
-    "mcp": { "title": "MCP" },
-    "anthropic": { "title": "Anthropic" },
-    "react": { "title": "React" },
-    "css": { "title": "CSS" },
-    "languages": { "title": "Lenguajes" },
-    "schemas": { "title": "Esquemas y arquitectura" },
-    "web3d": { "title": "Web 3D" }
-  },
-  "lesson": {
-    "area": "Área",
-    "overview": "Resumen de lecciones",
-    "reactName": "React",
-    "component": {
-      "title": "De dónde viene la palabra «Component».",
-      "source": "Fuente: Online Etymology Dictionary, https://www.etymonline.com/word/component",
-      "sections": {
-        "root": "Desglose de la raíz: latín componere «juntar, reunir un todo a partir de varias partes» = com («con, juntos») + ponere («colocar»). Literalmente, «algo colocado junto con otros» para formar un todo.",
-        "entered": "Entró en el inglés desde el latín componentem (nominativo componens), participio de presente de componere.",
-        "use1560s": "Primer uso registrado, década de 1560: «uno de un grupo de personas».",
-        "noun1640s": "Década de 1640: «parte o elemento constitutivo» (sustantivo).",
-        "adjective1660s": "Década de 1660: adjetivo «constitutivo, que entra en la composición de».",
-        "mechanical1896": "1896: «parte mecánica de una bicicleta, un automóvil, etc.».",
-        "today": "Hoy: la misma idea de un bloque de construcción reutilizable es lo que son los componentes de React."
-      }
+    "git": {
+      "title": "Git y GitHub"
+    },
+    "agents": {
+      "title": "Dirigir agentes de código con IA"
+    },
+    "mcp": {
+      "title": "MCP"
+    },
+    "anthropic": {
+      "title": "Anthropic"
+    },
+    "react": {
+      "title": "React"
+    },
+    "css": {
+      "title": "CSS"
+    },
+    "languages": {
+      "title": "Lenguajes"
+    },
+    "schemas": {
+      "title": "Esquemas y arquitectura"
+    },
+    "web3d": {
+      "title": "Web 3D"
     }
   },
   "about": {

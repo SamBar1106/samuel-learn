@@ -1,15 +1,53 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
-import { useLessonPage } from '../lib/useSiteData'
+import { Link, useParams } from 'react-router-dom'
+import { data, lessonAt } from '../lib/data'
+import { useAreas } from '../lib/useSiteData'
+
+function locatedLesson(slug) {
+  const lesson = lessonAt(slug)
+  return lesson ? { ...lesson, source: data.kind } : null
+}
 
 export function Lesson() {
+  const { slug } = useParams()
   const { t, i18n } = useTranslation()
-  const page = useLessonPage()
+  const areas = useAreas()
+  const [page, setPage] = useState(() => locatedLesson(slug))
 
   useEffect(() => {
-    document.title = t(page.titleKey)
-  }, [t, page.titleKey, i18n.language])
+    let active = true
+    data.getLesson(slug).then(
+      (result) => {
+        if (active) setPage(result)
+      },
+      () => {
+        if (active) setPage(null)
+      },
+    )
+    return () => {
+      active = false
+    }
+  }, [slug])
+
+  useEffect(() => {
+    document.title = page ? t(page.titleKey) : t('lessons.missing')
+  }, [t, page, i18n.language])
+
+  if (!page) {
+    return (
+      <main id="content" className="page">
+        <header className="page-intro shell">
+          <p>{t('lessons.missing')}</p>
+          <p className="lesson-nav">
+            <Link to="/lessons">{t('lessons.back')}</Link>
+          </p>
+        </header>
+      </main>
+    )
+  }
+
+  const area = areas.find((item) => item.id === page.areaId)
 
   return (
     <main id="content" className="lesson-page" data-source={page.source}>
@@ -21,7 +59,11 @@ export function Lesson() {
           </p>
           <p className="side-kicker">{t('lesson.area')}</p>
           <p className="side-area">
-            <Link to="/areas#react">{t('lesson.reactName')}</Link>
+            {area ? (
+              <Link to={`/areas#${area.id}`}>{t(area.titleKey)}</Link>
+            ) : (
+              <Link to="/lessons">{t('lessons.index.title')}</Link>
+            )}
           </p>
           <p className="side-overview">{t('lesson.overview')}</p>
           <Link className="side-lesson" to={page.path} aria-current="page">
@@ -31,9 +73,15 @@ export function Lesson() {
         </aside>
         <article>
           <p className="breadcrumb">
-            <Link to="/areas">{t('nav.areas')}</Link>
-            <span aria-hidden="true">/</span>
-            <Link to="/areas#react">{t('lesson.reactName')}</Link>
+            <Link to="/lessons">{t('lessons.back')}</Link>
+            {area ? (
+              <>
+                <span aria-hidden="true">/</span>
+                <Link to="/areas">{t('nav.areas')}</Link>
+                <span aria-hidden="true">/</span>
+                <Link to={`/areas#${area.id}`}>{t(area.titleKey)}</Link>
+              </>
+            ) : null}
           </p>
           <h1>{t(page.titleKey)}</h1>
           <ol className="lesson-sections">
@@ -42,10 +90,28 @@ export function Lesson() {
             ))}
           </ol>
           <p className="lesson-source">
-            <a href={page.sourceUrl} rel="noreferrer">
-              {t(page.sourceKey)}
-            </a>
+            {page.sourceUrl ? (
+              <a href={page.sourceUrl} rel="noreferrer">
+                {t(page.sourceKey)}
+              </a>
+            ) : (
+              t(page.sourceKey)
+            )}
           </p>
+          {page.previousSlug || page.nextSlug ? (
+            <nav className="lesson-nav" aria-label={t('lessons.index.title')}>
+              {page.previousSlug ? (
+                <Link to={`/lessons/${page.previousSlug}`}>
+                  {t('lessons.previous')}: {t(page.previousTitleKey)}
+                </Link>
+              ) : null}
+              {page.nextSlug ? (
+                <Link to={`/lessons/${page.nextSlug}`}>
+                  {t('lessons.next')}: {t(page.nextTitleKey)}
+                </Link>
+              ) : null}
+            </nav>
+          ) : null}
         </article>
       </div>
     </main>

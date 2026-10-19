@@ -758,6 +758,26 @@ h3 {
   }
 }
 
+.lesson-index-list {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0 0 3rem 1.5rem;
+}
+
+.lesson-index-list a,
+.lesson-nav a {
+  overflow-wrap: anywhere;
+}
+
+.lesson-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  max-width: 100%;
+  margin-top: 1.5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

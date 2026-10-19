@@ -25,6 +25,7 @@ test('passes lesson title, sections, and source through', async () => {
   const page = await chooseAdapter({}).getPage('lesson-component-etymology')
   assert.deepEqual(page, {
     id: 'lesson-component-etymology',
+    slug: 'component',
     titleKey: 'lesson.component.title',
     sectionKeys: [
       'lesson.component.sections.root',

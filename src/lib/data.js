@@ -6,6 +6,44 @@ function readPage(pages, id, source) {
   return { ...page, source }
 }
 
+export function lessonsInOrder(pages = content.pages) {
+  return pages.filter((page) => typeof page.slug === 'string' && page.slug !== '')
+}
+
+export function lessonAt(slug, pages = content.pages) {
+  const lessons = lessonsInOrder(pages)
+  const index = lessons.findIndex((page) => page.slug === slug)
+  if (index === -1) return null
+  const previous = lessons[index - 1]
+  const next = lessons[index + 1]
+  const page = lessons[index]
+  return {
+    ...page,
+    path: page.path ?? `/lessons/${page.slug}`,
+    previousSlug: previous?.slug ?? null,
+    previousTitleKey: previous?.titleKey ?? null,
+    nextSlug: next?.slug ?? null,
+    nextTitleKey: next?.titleKey ?? null,
+  }
+}
+
+function lessonMethods(pages, source) {
+  return {
+    async getLesson(slug) {
+      const lesson = lessonAt(slug, pages)
+      if (!lesson) throw new Error(`Unknown lesson: ${slug}`)
+      return { ...lesson, source }
+    },
+    async listLessons() {
+      return lessonsInOrder(pages).map((page) => ({
+        ...page,
+        path: page.path ?? `/lessons/${page.slug}`,
+        source,
+      }))
+    },
+  }
+}
+
 function listAreas(areas, source) {
   return areas.map((area) => ({ ...area, source }))
 }
@@ -19,6 +57,7 @@ function createLocalAdapter(pages, areas) {
     async listAreas() {
       return listAreas(areas, 'local')
     },
+    ...lessonMethods(pages, 'local'),
   }
 }
 
@@ -33,6 +72,14 @@ function createSupabaseAdapter(pages, areas, { url, anonKey }) {
     async listAreas() {
       if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
       return listAreas(areas, 'supabase')
+    },
+    async getLesson(slug) {
+      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
+      return lessonMethods(pages, 'supabase').getLesson(slug)
+    },
+    async listLessons() {
+      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
+      return lessonMethods(pages, 'supabase').listLessons()
     },
   }
 }

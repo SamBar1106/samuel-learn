@@ -8,6 +8,7 @@ import es from '../src/i18n/es.json' with { type: 'json' }
 const baseUrl = process.env.SCREENSHOT_URL ?? 'http://127.0.0.1:4173/samuel-learn/'
 const outDir = resolve('docs/screenshots')
 const root = baseUrl.replace(/\/$/, '')
+const catalogs = { en, es }
 const banned = [
   '7 min read',
   'Foundational',
@@ -27,6 +28,8 @@ const pages = [
   { name: 'home', path: '/' },
   { name: 'areas', path: '/areas' },
   { name: 'lesson', path: '/lessons/component' },
+  { name: 'lessons-index', path: '/lessons' },
+  { name: 'lesson-mcp', path: '/lessons/mcp' },
 ]
 
 const iphone = {
@@ -85,11 +88,24 @@ try {
         const headingTop = await page.locator('h1').evaluate((node) => node.getBoundingClientRect().top)
         if (htmlLang !== lang) throw new Error(`${entry.name} ${lang} html lang was ${htmlLang}`)
         assertClean(text, `${entry.name} ${lang} ${width}`)
-        if (!text.includes('[Placeholder]') && entry.name !== 'lesson') {
+        if (!text.includes('[Placeholder]') && (entry.name === 'home' || entry.name === 'areas')) {
           throw new Error(`${entry.name} is missing the placeholder marker`)
         }
         if (overflow > 1) throw new Error(`${entry.name} ${width} overflows by ${overflow}px`)
         if (headingTop < 48) throw new Error(`${entry.name} heading is hidden under the header`)
+        if (entry.name === 'lessons-index') {
+          const first = (await page.getByRole('listitem').first().innerText()).trim()
+          if (first !== catalogs[lang].lesson.mcp.title) {
+            throw new Error(`${lang} index should start with MCP, got ${first}`)
+          }
+        }
+        if (entry.name === 'lesson-mcp') {
+          const items = (await page.getByRole('listitem').allInnerTexts()).map((item) => item.trim())
+          const sections = Object.values(catalogs[lang].lesson.mcp.sections)
+          if (items.join('\n') !== sections.join('\n')) {
+            throw new Error(`${lang} MCP sections changed:\n${items.join('\n')}`)
+          }
+        }
         await page.screenshot({
           path: resolve(outDir, `${entry.name}-${lang}-${width}.png`),
           fullPage: true,
@@ -151,6 +167,12 @@ try {
   const opacity = await reducedPage.locator('[data-page-fade]').evaluate((node) => getComputedStyle(node).opacity)
   if (lenisActive) throw new Error('Lenis should stay off when reduced motion is requested')
   if (opacity !== '1') throw new Error(`expected full opacity under reduced motion, got ${opacity}`)
+  await reducedPage.goto(`${root}/lessons/mcp`, { waitUntil: 'networkidle' })
+  await reducedPage.locator('[data-page-fade]').waitFor()
+  const mcpLenis = await reducedPage.evaluate(() => document.documentElement.classList.contains('lenis'))
+  const mcpOpacity = await reducedPage.locator('[data-page-fade]').evaluate((node) => getComputedStyle(node).opacity)
+  if (mcpLenis) throw new Error('Lenis should stay off on the MCP lesson when reduced motion is requested')
+  if (mcpOpacity !== '1') throw new Error(`expected full opacity on the MCP lesson under reduced motion, got ${mcpOpacity}`)
   await reduced.close()
 } finally {
   await browser.close()

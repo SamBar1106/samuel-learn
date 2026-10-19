@@ -2,7 +2,7 @@
 
 Samuel Barrios personal bilingual (Spanish/English) learning website.
 
-Spanish and English are both first-class. The public pages are Home, lesson areas, About, and the first lesson at `/lessons/component`. Copy Samuel has not written stays marked `[Placeholder]`. The component lesson text is the existing etymology lesson, in both languages.
+Spanish and English are both first-class. The public pages are Home, the lessons index at `/lessons`, lesson areas, About, and the lessons themselves. Vocabulary lessons follow the technical learning list, with MCP (Model Context Protocol) first. The component etymology lesson remains at `/lessons/component`. Copy Samuel has not written stays marked `[Placeholder]`. The component lesson text is the existing etymology lesson, in both languages.
 
 ## Languages
 

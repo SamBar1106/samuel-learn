@@ -8,6 +8,7 @@ import { About } from '../pages/About'
 import { Areas } from '../pages/Areas'
 import { Home } from '../pages/Home'
 import { Lesson } from '../pages/Lesson'
+import { LessonsIndex } from '../pages/LessonsIndex'
 
 function ScrollReset() {
   const location = useLocation()
@@ -63,7 +64,8 @@ export function PageFade() {
             <Route path="/" element={<Home />} />
             <Route path="/areas" element={<Areas />} />
             <Route path="/about" element={<About />} />
-            <Route path="/lessons/component" element={<Lesson />} />
+            <Route path="/lessons" element={<LessonsIndex />} />
+            <Route path="/lessons/:slug" element={<Lesson />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </motion.div>

@@ -37,6 +37,9 @@ export function Home() {
             <span className="grid-icon" aria-hidden="true" />
             {t('home.explore', { count: areas.length })}
           </Link>
+          <Link className="button button-ghost" to="/lessons">
+            {t('lessons.back')}
+          </Link>
         </div>
       </section>
 

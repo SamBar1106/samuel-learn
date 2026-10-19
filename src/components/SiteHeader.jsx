@@ -10,7 +10,7 @@ const links = [
 ]
 
 function isCurrent(pathname, to) {
-  if (to === '/') return pathname === '/' || pathname.startsWith('/lessons/')
+  if (to === '/') return pathname === '/' || pathname === '/lessons' || pathname.startsWith('/lessons/')
   return pathname === to || pathname.startsWith(`${to}/`)
 }
 

@@ -1,14 +1,15 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import content from './src/data/content.json' with { type: 'json' }
 
-const routeFiles = [
-  'areas.html',
-  'areas/index.html',
-  'about.html',
-  'about/index.html',
-  'lessons/component.html',
-  'lessons/component/index.html',
-]
+const lessonFiles = content.pages
+  .filter((page) => page.slug || page.id === 'lessons')
+  .flatMap((page) => {
+    const path = page.slug ? `lessons/${page.slug}` : 'lessons'
+    return [`${path}.html`, `${path}/index.html`]
+  })
+
+const routeFiles = ['areas.html', 'areas/index.html', 'about.html', 'about/index.html', ...lessonFiles]
 
 function normalizeBase(value) {
   const raw = value && value.trim() ? value.trim() : '/samuel-learn/'
