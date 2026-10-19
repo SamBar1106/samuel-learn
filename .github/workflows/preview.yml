@@ -1,0 +1,62 @@
+name: Publish branch preview
+
+on:
+  push:
+    branches:
+      - cursor/stitch-site-dee1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-preview
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Check translations
+        run: npm run i18n:check
+
+      - name: Test
+        run: npm test
+
+      - name: Build preview
+        run: npm run build
+        env:
+          VITE_BASE: /samuel-learn/preview/
+
+      - name: Keep the live site and add preview/
+        run: node scripts/assemble-preview.mjs
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

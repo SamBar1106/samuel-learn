@@ -1,12 +1,55 @@
 {
   "page": {
-    "placeholder": "PLACEHOLDER"
+    "placeholder": "[Placeholder]"
   },
   "language": {
     "es": "ES",
     "en": "EN"
   },
+  "nav": {
+    "lessons": "Lessons",
+    "areas": "Areas",
+    "about": "About",
+    "start": "Start learning",
+    "menu": "Menu",
+    "close": "Close",
+    "github": "GitHub",
+    "skip": "Skip to content",
+    "primary": "Main",
+    "footer": "Footer"
+  },
+  "home": {
+    "eyebrow": "Bilingual interactive curriculum",
+    "titleLead": "Learn by",
+    "titleAccent": "building",
+    "startLesson": "Start first lesson",
+    "explore": "Explore {{count}} areas",
+    "startHere": "Start here",
+    "lessonNumber": "Lesson #01",
+    "firstLesson": "First lesson",
+    "readLesson": "Read lesson",
+    "curriculum": "Curriculum",
+    "lessonAreas": "Lesson areas",
+    "areaCount": "{{count}} areas",
+    "bilingual": "EN / ES"
+  },
+  "areas": {
+    "eyebrow": "Areas catalog",
+    "title": "Lesson areas",
+    "git": { "title": "Git & GitHub" },
+    "agents": { "title": "Directing AI coding agents" },
+    "mcp": { "title": "MCP" },
+    "anthropic": { "title": "Anthropic" },
+    "react": { "title": "React" },
+    "css": { "title": "CSS" },
+    "languages": { "title": "Languages" },
+    "schemas": { "title": "Schemas & Architecture" },
+    "web3d": { "title": "3D web" }
+  },
   "lesson": {
+    "area": "Area",
+    "overview": "Lessons overview",
+    "reactName": "React",
     "component": {
       "title": "Where the word \"Component\" comes from.",
       "source": "Source: Online Etymology Dictionary, https://www.etymonline.com/word/component",
@@ -20,5 +63,8 @@
         "today": "Today: the same idea of a reusable building block is what React components are."
       }
     }
+  },
+  "about": {
+    "title": "About"
   }
 }

@@ -2,7 +2,7 @@
 
 Samuel Barrios personal bilingual (Spanish/English) learning website.
 
-Spanish and English are both first-class. Home is still the placeholder page. The first lesson, where the word "component" comes from, is at `/lessons/component`.
+Spanish and English are both first-class. The public pages are Home, lesson areas, About, and the first lesson at `/lessons/component`. Copy Samuel has not written stays marked `[Placeholder]`. The component lesson text is the existing etymology lesson, in both languages.
 
 ## Languages
 
@@ -31,6 +31,12 @@ Lenis smooth scroll is driven by GSAP's ticker. The sample page fades in with Fr
 
 ## GitHub Pages
 
-`.github/workflows/pages.yml` deploys pushes to `main`. The Vite base path is `/samuel-learn/`. The build copies `index.html` to `404.html` so GitHub Pages can serve the client-side app for unknown paths. There is no custom domain.
+`.github/workflows/pages.yml` deploys pushes to `main`. The Vite base path is `/samuel-learn/`. The build copies `index.html` to `404.html`, and to the real routes, so GitHub Pages can serve the client-side app. There is no custom domain.
 
 https://sambar1106.github.io/samuel-learn/
+
+Branch review is published separately by `.github/workflows/preview.yml`. That workflow builds this branch with base `/samuel-learn/preview/`, downloads the current live site, and deploys the live files plus a `preview/` folder. It does not replace the homepage.
+
+https://sambar1106.github.io/samuel-learn/preview/
+
+Lenis smooths wheel scrolling when the primary pointer is fine. iPhone Safari and other touch devices keep native scrolling, so the browser toolbar and touch gestures still work.

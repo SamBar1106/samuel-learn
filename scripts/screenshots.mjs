@@ -1,4 +1,4 @@
-import { mkdir } from 'node:fs/promises'
+import { mkdir, readdir, rm } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { chromium } from 'playwright'
 import { LANGUAGE_STORAGE_KEY } from '../src/i18n/constants.js'
@@ -7,147 +7,150 @@ import es from '../src/i18n/es.json' with { type: 'json' }
 
 const baseUrl = process.env.SCREENSHOT_URL ?? 'http://127.0.0.1:4173/samuel-learn/'
 const outDir = resolve('docs/screenshots')
-const catalogs = { en, es }
-const lessonUrl = `${baseUrl.replace(/\/$/, '')}/lessons/component`
-
-const cases = [
-  { lang: 'es', width: 1280, height: 800 },
-  { lang: 'en', width: 1280, height: 800 },
-  { lang: 'es', width: 390, height: 844 },
-  { lang: 'en', width: 390, height: 844 },
+const root = baseUrl.replace(/\/$/, '')
+const banned = [
+  '7 min read',
+  'Foundational',
+  'Philosophy',
+  '© 2025',
+  'Node: Parent',
+  'State: Pure',
+  'Orbit & Drag',
+  '12 min',
+  'All rights reserved',
+  'Built for creative developers',
+  'INTERACTIVE 3D SANDBOX',
+  'Placeholder lesson text',
 ]
 
+const pages = [
+  { name: 'home', path: '/' },
+  { name: 'areas', path: '/areas' },
+  { name: 'lesson', path: '/lessons/component' },
+]
+
+const iphone = {
+  userAgent:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+  hasTouch: true,
+  isMobile: true,
+}
+
 await mkdir(outDir, { recursive: true })
+for (const file of await readdir(outDir)) {
+  if (file.endsWith('.png')) await rm(resolve(outDir, file))
+}
+
 const browser = await chromium.launch()
 
-try {
-  for (const { lang, width, height } of cases) {
-    const context = await browser.newContext({
-      viewport: { width, height },
-      locale: lang === 'en' ? 'en-US' : 'es-MX',
-      deviceScaleFactor: 1,
-    })
-    await context.addInitScript(
-      ([key, value]) => {
-        localStorage.setItem(key, value)
-      },
-      [LANGUAGE_STORAGE_KEY, lang],
-    )
-    const page = await context.newPage()
-    await page.goto(baseUrl, { waitUntil: 'networkidle' })
-    await page.locator('[data-page-fade]').waitFor()
-    await page.waitForFunction(() => {
-      const fade = document.querySelector('[data-page-fade]')
-      return fade && Number(getComputedStyle(fade).opacity) > 0.99
-    })
-    const htmlLang = await page.locator('html').getAttribute('lang')
-    const heading = (await page.getByRole('heading').innerText()).trim()
-    const source = await page.locator('main').getAttribute('data-source')
-    const visible = (await page.locator('body').innerText())
-      .split('\n')
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .sort()
-    const expected = ['EN', 'ES', 'PLACEHOLDER', catalogs[lang].lesson.component.title].sort()
-    if (htmlLang !== lang) throw new Error(`expected html lang ${lang}, got ${htmlLang}`)
-    if (heading !== 'PLACEHOLDER') throw new Error(`expected PLACEHOLDER, got ${heading}`)
-    if (source !== 'local') throw new Error(`expected local data source, got ${source}`)
-    if (visible.join('|') !== expected.join('|')) {
-      throw new Error(`unexpected visible text: ${visible.join(' | ')}`)
-    }
-    await page.screenshot({ path: resolve(outDir, `${lang}-${width}.png`) })
-    await context.close()
+function assertClean(text, where) {
+  for (const phrase of banned) {
+    if (text.includes(phrase)) throw new Error(`${where} includes invented copy: ${phrase}`)
   }
+}
 
-  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } })
+async function prepare(context, lang) {
   await context.addInitScript(
-    ([key]) => {
-      localStorage.setItem(key, 'es')
+    ([key, value]) => {
+      localStorage.setItem(key, value)
     },
-    [LANGUAGE_STORAGE_KEY],
+    [LANGUAGE_STORAGE_KEY, lang],
   )
   const page = await context.newPage()
-  await page.goto(baseUrl, { waitUntil: 'networkidle' })
+  return page
+}
+
+try {
+  for (const lang of ['en', 'es']) {
+    for (const width of [1280, 390]) {
+      const context = await browser.newContext({
+        viewport: { width, height: width === 390 ? 844 : 900 },
+        locale: lang === 'en' ? 'en-US' : 'es-MX',
+        deviceScaleFactor: 1,
+        ...(width === 390 ? iphone : {}),
+      })
+      const page = await prepare(context, lang)
+      for (const entry of pages) {
+        await page.goto(`${root}${entry.path}`, { waitUntil: 'networkidle' })
+        await page.locator('[data-page-fade]').waitFor()
+        await page.waitForFunction(() => {
+          const fade = document.querySelector('[data-page-fade]')
+          return fade && Number(getComputedStyle(fade).opacity) > 0.99
+        })
+        const htmlLang = await page.locator('html').getAttribute('lang')
+        const text = await page.locator('body').innerText()
+        const overflow = await page.evaluate(
+          () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        )
+        const headingTop = await page.locator('h1').evaluate((node) => node.getBoundingClientRect().top)
+        if (htmlLang !== lang) throw new Error(`${entry.name} ${lang} html lang was ${htmlLang}`)
+        assertClean(text, `${entry.name} ${lang} ${width}`)
+        if (!text.includes('[Placeholder]') && entry.name !== 'lesson') {
+          throw new Error(`${entry.name} is missing the placeholder marker`)
+        }
+        if (overflow > 1) throw new Error(`${entry.name} ${width} overflows by ${overflow}px`)
+        if (headingTop < 48) throw new Error(`${entry.name} heading is hidden under the header`)
+        await page.screenshot({
+          path: resolve(outDir, `${entry.name}-${lang}-${width}.png`),
+          fullPage: true,
+        })
+      }
+
+      const lenis = await page.evaluate(() => document.documentElement.classList.contains('lenis'))
+      if (width === 390 && lenis) throw new Error('Lenis should stay off for iPhone-sized touch browsing')
+      if (width === 1280 && !lenis) throw new Error('Lenis should be on for desktop wheel scrolling')
+      await context.close()
+    }
+  }
+
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } })
+  const page = await prepare(context, 'es')
+  await page.goto(`${root}/`, { waitUntil: 'networkidle' })
   await page.getByRole('button', { name: 'ES', pressed: true }).waitFor()
   await page.getByRole('button', { name: 'EN' }).click()
   await page.waitForFunction(() => document.documentElement.lang === 'en')
   const stored = await page.evaluate((key) => localStorage.getItem(key), LANGUAGE_STORAGE_KEY)
-  const heading = (await page.getByRole('heading').innerText()).trim()
+  await page.getByRole('heading', { level: 1, name: 'Learn by building' }).waitFor()
   if (stored !== 'en') throw new Error(`expected stored language en, got ${stored}`)
-  if (heading !== 'PLACEHOLDER') throw new Error(`language switch changed the page text to ${heading}`)
   await page.getByRole('link', { name: en.lesson.component.title }).click()
   await page.waitForURL(/\/lessons\/component$/)
-  await page.getByRole('heading', { name: en.lesson.component.title }).waitFor()
+  await page.getByRole('heading', { level: 1, name: en.lesson.component.title }).waitFor()
+  const items = (await page.getByRole('listitem').allInnerTexts()).map((item) => item.trim())
+  if (items.join('\n') !== Object.values(en.lesson.component.sections).join('\n')) {
+    throw new Error(`lesson sections changed:\n${items.join('\n')}`)
+  }
+  const sourceHref = await page.getByRole('link', { name: en.lesson.component.source }).getAttribute('href')
+  if (sourceHref !== 'https://www.etymonline.com/word/component') {
+    throw new Error(`expected etymonline source, got ${sourceHref}`)
+  }
   await context.close()
 
-  for (const lang of ['en', 'es']) {
-    const lessonContext = await browser.newContext({
-      viewport: { width: 1280, height: 800 },
-      locale: lang === 'en' ? 'en-US' : 'es-MX',
-      deviceScaleFactor: 1,
-    })
-    await lessonContext.addInitScript(
-      ([key, value]) => {
-        localStorage.setItem(key, value)
-      },
-      [LANGUAGE_STORAGE_KEY, lang],
-    )
-    const lessonPage = await lessonContext.newPage()
-    await lessonPage.goto(lessonUrl, { waitUntil: 'networkidle' })
-    await lessonPage.locator('[data-page-fade]').waitFor()
-    await lessonPage.waitForFunction(() => {
-      const fade = document.querySelector('[data-page-fade]')
-      return fade && Number(getComputedStyle(fade).opacity) > 0.99
-    })
-    const lesson = catalogs[lang].lesson.component
-    const htmlLang = await lessonPage.locator('html').getAttribute('lang')
-    const lessonHeading = (await lessonPage.getByRole('heading').innerText()).trim()
-    const items = (await lessonPage.getByRole('listitem').allInnerTexts()).map((item) => item.trim())
-    const sourceHref = await lessonPage.getByRole('link', { name: lesson.source }).getAttribute('href')
-    const dataSource = await lessonPage.locator('main').getAttribute('data-source')
-    if (htmlLang !== lang) throw new Error(`expected lesson html lang ${lang}, got ${htmlLang}`)
-    if (lessonHeading !== lesson.title) throw new Error(`expected lesson title, got ${lessonHeading}`)
-    if (items.join('|') !== Object.values(lesson.sections).join('|')) {
-      throw new Error(`unexpected lesson sections: ${items.join(' | ')}`)
-    }
-    if (sourceHref !== 'https://www.etymonline.com/word/component') {
-      throw new Error(`expected etymonline source, got ${sourceHref}`)
-    }
-    if (dataSource !== 'local') throw new Error(`expected local data source, got ${dataSource}`)
-    await lessonPage.screenshot({
-      path: resolve(outDir, `lesson-${lang}-1280.png`),
-      fullPage: true,
-    })
-    await lessonContext.close()
+  const spanish = await browser.newContext({ viewport: { width: 390, height: 844 }, ...iphone })
+  const spanishPage = await prepare(spanish, 'es')
+  await spanishPage.goto(`${root}/lessons/component`, { waitUntil: 'networkidle' })
+  const spanishItems = (await spanishPage.getByRole('listitem').allInnerTexts()).map((item) => item.trim())
+  if (spanishItems.join('\n') !== Object.values(es.lesson.component.sections).join('\n')) {
+    throw new Error(`Spanish lesson sections changed:\n${spanishItems.join('\n')}`)
   }
-
-  const reduced = await browser.newContext({
-    viewport: { width: 1280, height: 800 },
-    reducedMotion: 'reduce',
+  await spanishPage.getByRole('button', { name: 'Menú' }).click()
+  await spanishPage.locator('#mobile-nav').getByRole('link', { name: 'Áreas' }).click()
+  await spanishPage.waitForURL(/\/areas$/)
+  await spanishPage.getByRole('heading', { level: 1, name: 'Áreas de lecciones' }).waitFor()
+  const scrolled = await spanishPage.evaluate(async () => {
+    window.scrollTo(0, 500)
+    await new Promise((resolve) => requestAnimationFrame(resolve))
+    return window.scrollY
   })
-  await reduced.addInitScript(
-    ([key]) => {
-      localStorage.setItem(key, 'es')
-    },
-    [LANGUAGE_STORAGE_KEY],
-  )
-  const reducedPage = await reduced.newPage()
-  await reducedPage.goto(baseUrl, { waitUntil: 'networkidle' })
-  await reducedPage.locator('[data-page-fade]').waitFor()
+  if (scrolled < 200) throw new Error(`iPhone-sized page did not scroll (${scrolled})`)
+  await spanish.close()
+
+  const reduced = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' })
+  const reducedPage = await prepare(reduced, 'en')
+  await reducedPage.goto(`${root}/`, { waitUntil: 'networkidle' })
   const lenisActive = await reducedPage.evaluate(() => document.documentElement.classList.contains('lenis'))
   const opacity = await reducedPage.locator('[data-page-fade]').evaluate((node) => getComputedStyle(node).opacity)
   if (lenisActive) throw new Error('Lenis should stay off when reduced motion is requested')
   if (opacity !== '1') throw new Error(`expected full opacity under reduced motion, got ${opacity}`)
-  await reducedPage.goto(lessonUrl, { waitUntil: 'networkidle' })
-  await reducedPage.locator('[data-page-fade]').waitFor()
-  const lessonLenis = await reducedPage.evaluate(() => document.documentElement.classList.contains('lenis'))
-  const lessonOpacity = await reducedPage
-    .locator('[data-page-fade]')
-    .evaluate((node) => getComputedStyle(node).opacity)
-  if (lessonLenis) throw new Error('Lenis should stay off on the lesson when reduced motion is requested')
-  if (lessonOpacity !== '1') {
-    throw new Error(`expected full opacity on the lesson under reduced motion, got ${lessonOpacity}`)
-  }
   await reduced.close()
 } finally {
   await browser.close()

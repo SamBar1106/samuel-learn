@@ -28,3 +28,4 @@ dist-ssr
 !.env.example
 playwright-report
 test-results
+site

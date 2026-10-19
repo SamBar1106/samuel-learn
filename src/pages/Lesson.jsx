@@ -1,62 +1,53 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { data } from '../lib/data'
-
-const fallback = {
-  titleKey: 'lesson.component.title',
-  sectionKeys: [
-    'lesson.component.sections.root',
-    'lesson.component.sections.entered',
-    'lesson.component.sections.use1560s',
-    'lesson.component.sections.noun1640s',
-    'lesson.component.sections.adjective1660s',
-    'lesson.component.sections.mechanical1896',
-    'lesson.component.sections.today',
-  ],
-  sourceKey: 'lesson.component.source',
-  sourceUrl: 'https://www.etymonline.com/word/component',
-  source: data.kind,
-}
+import { Link } from 'react-router-dom'
+import { useLessonPage } from '../lib/useSiteData'
 
 export function Lesson() {
   const { t, i18n } = useTranslation()
-  const [page, setPage] = useState(fallback)
-
-  useEffect(() => {
-    let active = true
-    data.getPage('lesson-component-etymology').then(
-      (result) => {
-        if (active) setPage(result)
-      },
-      () => {
-        if (active) setPage(fallback)
-      },
-    )
-    return () => {
-      active = false
-    }
-  }, [])
+  const page = useLessonPage()
 
   useEffect(() => {
     document.title = t(page.titleKey)
   }, [t, page.titleKey, i18n.language])
 
   return (
-    <>
-      <main className="lesson" data-source={page.source}>
+    <main id="content" className="lesson-page" data-source={page.source}>
+      <div className="lesson-layout shell">
+        <aside className="lesson-side">
+          <p className="section-label">
+            <span className="dot" aria-hidden="true" />
+            {t('home.curriculum')}
+          </p>
+          <p className="side-kicker">{t('lesson.area')}</p>
+          <p className="side-area">
+            <Link to="/areas#react">{t('lesson.reactName')}</Link>
+          </p>
+          <p className="side-overview">{t('lesson.overview')}</p>
+          <Link className="side-lesson" to={page.path} aria-current="page">
+            <span className="dot" aria-hidden="true" />
+            {t(page.titleKey)}
+          </Link>
+        </aside>
         <article>
+          <p className="breadcrumb">
+            <Link to="/areas">{t('nav.areas')}</Link>
+            <span aria-hidden="true">/</span>
+            <Link to="/areas#react">{t('lesson.reactName')}</Link>
+          </p>
           <h1>{t(page.titleKey)}</h1>
-          <ol>
+          <ol className="lesson-sections">
             {page.sectionKeys.map((key) => (
               <li key={key}>{t(key)}</li>
             ))}
           </ol>
           <p className="lesson-source">
-            <a href={page.sourceUrl}>{t(page.sourceKey)}</a>
+            <a href={page.sourceUrl} rel="noreferrer">
+              {t(page.sourceKey)}
+            </a>
           </p>
         </article>
-      </main>
-      <div className="scroll-room" aria-hidden="true" />
-    </>
+      </div>
+    </main>
   )
 }

@@ -6,22 +6,33 @@ function readPage(pages, id, source) {
   return { ...page, source }
 }
 
-function createLocalAdapter(pages) {
+function listAreas(areas, source) {
+  return areas.map((area) => ({ ...area, source }))
+}
+
+function createLocalAdapter(pages, areas) {
   return {
     kind: 'local',
     async getPage(id) {
       return readPage(pages, id, 'local')
     },
+    async listAreas() {
+      return listAreas(areas, 'local')
+    },
   }
 }
 
-function createSupabaseAdapter(pages, { url, anonKey }) {
+function createSupabaseAdapter(pages, areas, { url, anonKey }) {
   return {
     kind: 'supabase',
     async getPage(id) {
       if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
       // Stub: both env vars select this adapter, but it does not call Supabase yet.
       return readPage(pages, id, 'supabase')
+    },
+    async listAreas() {
+      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
+      return listAreas(areas, 'supabase')
     },
   }
 }
@@ -30,11 +41,11 @@ function configured(value) {
   return typeof value === 'string' && value.trim() !== ''
 }
 
-export function chooseAdapter(env = {}, pages = content.pages) {
+export function chooseAdapter(env = {}, pages = content.pages, areas = content.areas) {
   const url = configured(env.VITE_SUPABASE_URL) ? env.VITE_SUPABASE_URL.trim() : ''
   const anonKey = configured(env.VITE_SUPABASE_ANON_KEY) ? env.VITE_SUPABASE_ANON_KEY.trim() : ''
-  if (url && anonKey) return createSupabaseAdapter(pages, { url, anonKey })
-  return createLocalAdapter(pages)
+  if (url && anonKey) return createSupabaseAdapter(pages, areas, { url, anonKey })
+  return createLocalAdapter(pages, areas)
 }
 
 function clientEnv() {
