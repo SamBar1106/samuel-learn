@@ -31,24 +31,19 @@ export function LoomIndex() {
   }, [t, page.titleKey, i18n.language])
 
   return (
-    <>
-      <main className="lesson-index loom-index" data-source={page.source}>
-        <article>
-          <h1>{t(page.titleKey)}</h1>
-          <p className="loom-intro">{t(page.introKey)}</p>
-          <ol start={0}>
-            {modules.map((module) => (
-              <li key={module.id} className="loom-module" data-status="soon">
-                <div className="loom-module-head">
-                  <span className="loom-module-title">{t(module.titleKey)}</span>
-                  <span className="loom-status">{t(page.soonKey)}</span>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </article>
-      </main>
-      <div className="scroll-room" aria-hidden="true" />
-    </>
+    <main id="content" className="page lesson-index loom-index" data-source={page.source}>
+      <header className="page-intro shell">
+        <h1>{t(page.titleKey)}</h1>
+        <p className="loom-intro">{t(page.introKey)}</p>
+      </header>
+      <ol className="lesson-index-list shell" start={0}>
+        {modules.map((module) => (
+          <li key={module.id} className="loom-module" data-status="soon">
+            <span className="loom-module-title">{t(module.titleKey)}</span>
+            <span className="loom-status">{t(page.soonKey)}</span>
+          </li>
+        ))}
+      </ol>
+    </main>
   )
 }

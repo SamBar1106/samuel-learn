@@ -1,6 +1,6 @@
 {
   "page": {
-    "placeholder": "PLACEHOLDER"
+    "placeholder": "[Placeholder]"
   },
   "language": {
     "es": "ES",
@@ -284,7 +284,71 @@
         "pii": "PII, data retention, client confidentiality: legal duty for tax data.",
         "dueDates": "Due-date reminders and extensions: a core tax-season workflow."
       }
+    },
+    "area": "Area",
+    "overview": "Lessons overview",
+    "reactName": "React"
+  },
+  "nav": {
+    "lessons": "Lessons",
+    "areas": "Areas",
+    "about": "About",
+    "start": "Start learning",
+    "menu": "Menu",
+    "close": "Close",
+    "github": "GitHub",
+    "skip": "Skip to content",
+    "primary": "Main",
+    "footer": "Footer"
+  },
+  "home": {
+    "eyebrow": "Bilingual interactive curriculum",
+    "titleLead": "Learn by",
+    "titleAccent": "building",
+    "startLesson": "Start first lesson",
+    "explore": "Explore {{count}} areas",
+    "startHere": "Start here",
+    "lessonNumber": "Lesson #01",
+    "firstLesson": "First lesson",
+    "readLesson": "Read lesson",
+    "curriculum": "Curriculum",
+    "lessonAreas": "Lesson areas",
+    "areaCount": "{{count}} areas",
+    "bilingual": "EN / ES"
+  },
+  "areas": {
+    "eyebrow": "Areas catalog",
+    "title": "Lesson areas",
+    "git": {
+      "title": "Git & GitHub"
+    },
+    "agents": {
+      "title": "Directing AI coding agents"
+    },
+    "mcp": {
+      "title": "MCP"
+    },
+    "anthropic": {
+      "title": "Anthropic"
+    },
+    "react": {
+      "title": "React"
+    },
+    "css": {
+      "title": "CSS"
+    },
+    "languages": {
+      "title": "Languages"
+    },
+    "schemas": {
+      "title": "Schemas & Architecture"
+    },
+    "web3d": {
+      "title": "3D web"
     }
+  },
+  "about": {
+    "title": "About"
   },
   "loom": {
     "index": {

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
-import { chooseAdapter, contentTranslationKeys } from '../src/lib/data.js'
+import { chooseAdapter } from '../src/lib/data.js'
 
 function readJson(path) {
   return JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'))
@@ -50,9 +50,18 @@ test('loom index lists every module as coming soon, with no lessons', async () =
   assert.doesNotMatch(index, /<Link/)
 })
 
+function loomKeys(value, prefix = 'loom', keys = []) {
+  if (!value || typeof value !== 'object') return keys
+  for (const [key, child] of Object.entries(value)) {
+    const path = prefix ? `${prefix}.${key}` : key
+    if (typeof child === 'string' && key.endsWith('Key')) keys.push(child)
+    else if (typeof child === 'object') loomKeys(child, path, keys)
+  }
+  return keys
+}
+
 test('loom index strings exist in both languages', () => {
-  for (const key of contentTranslationKeys(content)) {
-    if (!key.startsWith('loom.')) continue
+  for (const key of loomKeys(content.loom)) {
     const english = dig(en, key)
     const spanish = dig(es, key)
     assert.equal(typeof english, 'string', key)
