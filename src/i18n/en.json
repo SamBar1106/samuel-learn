@@ -292,52 +292,13 @@
       "intro": "Loom is the product you are building. This course follows the 11 build stages, one module each. Modules appear as each stage starts."
     },
     "status": {
-      "available": "Available",
       "soon": "Coming soon"
     },
-    "soonBody": "Lesson coming when this stage starts.",
-    "sections": {
-      "doing": "What we're doing",
-      "why": "Why it matters",
-      "keywords": "Key words",
-      "worked": "You'll know it worked when..."
-    },
     "m0": {
-      "title": "The big picture",
-      "summary": "What Loom is, who pays whom, and how the 11 stages fit together.",
-      "doing": "We are building Loom, a store-builder service. Each client gets an 11-page website for their shop, a dashboard where they manage products and orders, online payments through Stripe, and an iPhone app. Many clients share one system, and each one only ever sees their own data. That is called multi-tenant.",
-      "paysTitle": "Who pays whom",
-      "pays": "A shopper pays the client's shop. Stripe takes its own card fee from the client. Loom adds a small platform fee of 2.175% + 22.5¢ per sale, set in code with application_fee_amount. The rest goes to the client. Each client has their own Stripe account, so the client owns the money relationship; Loom only takes its fee.",
-      "why": "Knowing who pays whom keeps the product honest and simple: Loom is software for stores, not a bank. Loom is also not finished when the website and dashboard work. It is only complete when the iPhone app is live on the App Store, because clients need to run their shop from their phone.",
-      "stagesTitle": "How the 11 stages fit",
-      "stages": "1 Stripe platform setup · 2 Backend foundation · 3 Client onboarding · 4 Payment flow · 5 Image storage · 6 Dashboard · 7 Store sites · 8 Email · 9 Launch and hardening · 10 iPhone app build · 11 App Store submission and launch. Stages 1–9 build the web product. Stage 10 starts after the dashboard's core screens work, because the app reuses the same backend. Stage 11 gets the app into the App Store.",
-      "keywords": {
-        "multiTenant": "Multi-tenant — one system serving many clients, each seeing only their own data.",
-        "tenant": "Tenant — one client (one shop) inside the system.",
-        "platform": "Platform — Loom itself, the service that clients' shops run on.",
-        "connectedAccount": "Connected account — a client's own Stripe account linked to Loom's platform.",
-        "applicationFee": "Application fee — the cut Loom takes from each sale (2.175% + 22.5¢).",
-        "stage": "Stage — one of the 11 steps of building Loom."
-      },
-      "worked": "You can explain in two sentences what Loom is, name who pays whom on a sale, say why the App Store is the finish line, and list the 11 stages in order."
+      "title": "The big picture"
     },
     "m1": {
-      "title": "Stripe platform setup",
-      "summary": "Stage 1: get Loom set up as a Stripe Connect platform so clients can take payments.",
-      "doing": "We create Loom's own Stripe account, turn on Stripe Connect, and complete the platform profile that Stripe reviews. We build and test in Stripe's sandbox (test mode) first, with separate test keys, and keep live keys unused until review passes. We set two-factor login, our brand name and icon for the sign-up pages clients will see, and a webhook endpoint (Stripe's way of telling our server that something happened) that checks a signature. The plan is direct charges: the client's shop is the seller, and Loom adds its application fee. New Connect platforms use Stripe's current account model (Accounts v2) with clients getting the full Stripe Dashboard.",
-      "why": "Nothing else can take money until this stage is done. Stripe checks the platform before going live, and common delays are a website that is not live or has no policies, a vague business description, or a legal name that does not match tax records. Stripe also restricts \"payment aggregation\", so Loom is positioned as software with direct charges where clients keep their own Stripe relationship. Stripe publishes no review deadline, so we never promise launch dates.",
-      "keywords": {
-        "platform": "Platform — Loom's own Stripe account; it is the parent that clients connect to.",
-        "connectedAccount": "Connected account — a client's own Stripe account, linked to the platform.",
-        "stripeConnect": "Stripe Connect — Stripe's product for platforms whose users take payments.",
-        "platformProfileReview": "Platform profile review — Stripe's check of how Loom works and who it serves, before going live.",
-        "sandbox": "Sandbox — Stripe's test mode with fake money and separate test keys.",
-        "directCharge": "Direct charge — the payment is made on the client's account; Loom adds its application fee.",
-        "webhook": "Webhook — a message Stripe sends to our server when an event happens, such as a payment succeeding.",
-        "signingSecret": "Signing secret — a private value used to check a webhook really came from Stripe; never put it in code or the repository.",
-        "kyc": "KYC — \"know your customer\" identity checks Stripe requires."
-      },
-      "worked": "Your Stripe account is verified with two-factor login on, Connect is enabled and the platform profile is submitted, and a test client account can be connected in the sandbox. A test sale in the sandbox should show the application fee on top of Stripe's own fee, and a webhook arrives and passes its signature check."
+      "title": "Stripe platform setup"
     },
     "m2": {
       "title": "Backend foundation"
@@ -352,21 +313,7 @@
       "title": "Image storage"
     },
     "m6": {
-      "title": "Dashboard",
-      "summary": "Stage 6: the web dashboard where clients manage products and orders. Being built now.",
-      "doing": "We are building the dashboard, the screen a client logs into to run their shop. They add and edit products (name, price, stock, whether it is published) and see and manage orders. It is built with React and TypeScript, bundled by Vite, and styled with shadcn components. It talks to the Loom backend at its own API address, and the finished files are hosted as a static site behind Cloudflare. The iPhone app later reuses the same backend, so the dashboard's core screens (login, orders, products) come first.",
-      "why": "The dashboard is where a client sees value every day: products and orders. It must show each client only their own data, which the backend enforces with a tenant ID on every row plus Postgres row-level security. Because the dashboard is the paid product, it is not hosted on GitHub Pages, which forbids online-business sites; it uses Cloudflare instead. And a stable API contract here saves work in stage 10.",
-      "keywords": {
-        "react": "React — a library for building screens out of reusable pieces called components.",
-        "typescript": "TypeScript — JavaScript with types, so many mistakes are caught before the code runs.",
-        "vite": "Vite — the tool that runs the dev server and bundles the app into static files.",
-        "shadcn": "shadcn — a set of ready-made, editable interface components (buttons, tables, forms).",
-        "api": "API — the defined way the dashboard asks the backend for data.",
-        "rowLevelSecurity": "Row-level security — a database rule so each client can only read their own rows.",
-        "staticSite": "Static site — plain HTML/JS/CSS files with no server code, easy to host on a CDN.",
-        "cors": "CORS — a browser rule; the API allows requests only from the dashboard's own address."
-      },
-      "worked": "A client can log in, see only their own products and orders, add or edit a product (price, stock, published), and open an order's details. Another client's data never appears, and the screens work on a phone-sized window too."
+      "title": "Dashboard"
     },
     "m7": {
       "title": "Store sites"

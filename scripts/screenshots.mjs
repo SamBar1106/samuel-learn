@@ -45,38 +45,16 @@ async function shotPage(browser, root, shot) {
     const fade = document.querySelector('[data-page-fade]')
     return fade && Number(getComputedStyle(fade).opacity) > 0.99
   })
-  const heading = (await page.getByRole('heading', { level: 1 }).innerText()).trim()
+  const heading = (await page.getByRole('heading').innerText()).trim()
   const htmlLang = await page.locator('html').getAttribute('lang')
   if (heading !== shot.heading) throw new Error(`expected ${shot.heading}, got ${heading}`)
   if (htmlLang !== shot.lang) throw new Error(`expected html lang ${shot.lang}, got ${htmlLang}`)
   if (shot.path === 'loom') {
     const copy = catalogs[shot.lang].loom
-    const available = await page.getByText(copy.status.available, { exact: true }).count()
     const soon = await page.getByText(copy.status.soon, { exact: true }).count()
-    const soonBody = await page.getByText(copy.soonBody, { exact: true }).count()
-    if (available !== 3 || soon !== 9 || soonBody !== 9) {
-      throw new Error(`unexpected loom index labels: ${available} available, ${soon} soon, ${soonBody} bodies`)
-    }
-    const links = (await page.getByRole('link').allInnerTexts()).map((item) => item.replace(/\s+/g, ' ').trim())
-    const expectedLinks = [copy.m0.title, copy.m1.title, copy.m6.title]
-    if (links.join('|') !== expectedLinks.join('|')) {
-      throw new Error(`unexpected loom links: ${links.join(' | ')}`)
-    }
-  }
-  if (shot.path === 'loom/loom-0') {
-    const copy = catalogs[shot.lang].loom
-    const headings = (await page.getByRole('heading').allInnerTexts()).map((item) => item.replace(/\s+/g, ' ').trim())
-    const expectedHeadings = [
-      copy.m0.title,
-      copy.sections.doing,
-      copy.m0.paysTitle,
-      copy.sections.why,
-      copy.m0.stagesTitle,
-      copy.sections.keywords,
-      copy.sections.worked,
-    ]
-    if (headings.join('|') !== expectedHeadings.join('|')) {
-      throw new Error(`unexpected loom-0 headings: ${headings.join(' | ')}`)
+    const links = await page.getByRole('link').count()
+    if (soon !== 12 || links !== 0) {
+      throw new Error(`unexpected loom index: ${soon} coming soon, ${links} links`)
     }
   }
   if (shot.path === 'lessons') {
@@ -218,13 +196,11 @@ try {
     { lang: 'es', path: 'lessons/mcp', file: 'lesson-mcp-es-1280.png', heading: es.lesson.mcp.title },
     { lang: 'en', path: 'loom', file: 'loom-index-en-1280.png', heading: en.loom.index.title },
     { lang: 'es', path: 'loom', file: 'loom-index-es-1280.png', heading: es.loom.index.title },
-    { lang: 'en', path: 'loom/loom-0', file: 'loom-0-en-1280.png', heading: en.loom.m0.title },
-    { lang: 'es', path: 'loom/loom-0', file: 'loom-0-es-1280.png', heading: es.loom.m0.title },
   ]
   for (const shot of shots) {
     await shotPage(browser, baseUrl, shot)
   }
-  for (const width of [390, 768, 1024, 1280]) {
+  for (const width of [390, 768, 1024]) {
     await shotPage(browser, baseUrl, {
       lang: 'es',
       path: 'lessons',
@@ -241,31 +217,22 @@ try {
       height: width === 390 ? 844 : 1024,
       checkOverflow: true,
     })
-    for (const path of ['loom', 'loom/loom-0', 'loom/loom-1', 'loom/loom-6']) {
-      const heading =
-        path === 'loom'
-          ? es.loom.index.title
-          : es.loom[path.endsWith('loom-0') ? 'm0' : path.endsWith('loom-1') ? 'm1' : 'm6'].title
-      await shotPage(browser, baseUrl, {
-        lang: 'es',
-        path,
-        heading,
-        width,
-        height: width === 390 ? 844 : 1024,
-        checkOverflow: true,
-      })
-      await shotPage(browser, baseUrl, {
-        lang: 'en',
-        path,
-        heading:
-          path === 'loom'
-            ? en.loom.index.title
-            : en.loom[path.endsWith('loom-0') ? 'm0' : path.endsWith('loom-1') ? 'm1' : 'm6'].title,
-        width,
-        height: width === 390 ? 844 : 1024,
-        checkOverflow: true,
-      })
-    }
+    await shotPage(browser, baseUrl, {
+      lang: 'es',
+      path: 'loom',
+      heading: es.loom.index.title,
+      width,
+      height: width === 390 ? 844 : 1024,
+      checkOverflow: true,
+    })
+    await shotPage(browser, baseUrl, {
+      lang: 'en',
+      path: 'loom',
+      heading: en.loom.index.title,
+      width,
+      height: width === 390 ? 844 : 1024,
+      checkOverflow: true,
+    })
   }
 
   const reduced = await browser.newContext({

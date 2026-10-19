@@ -34,30 +34,7 @@ export function loomIndexMeta(loom = content.loom) {
     id: loom.id,
     titleKey: loom.titleKey,
     introKey: loom.introKey,
-    availableKey: loom.availableKey,
     soonKey: loom.soonKey,
-    soonBodyKey: loom.soonBodyKey,
-  }
-}
-
-function availableLoomLessons(loom) {
-  return loomModulesInOrder(loom).filter(
-    (module) => module.status === 'available' && typeof module.slug === 'string' && module.slug !== '',
-  )
-}
-
-export function loomLessonAt(slug, loom = content.loom) {
-  const lessons = availableLoomLessons(loom)
-  const index = lessons.findIndex((module) => module.slug === slug)
-  if (index === -1) return null
-  const previous = lessons[index - 1]
-  const next = lessons[index + 1]
-  return {
-    ...lessons[index],
-    previousSlug: previous?.slug ?? null,
-    previousTitleKey: previous?.titleKey ?? null,
-    nextSlug: next?.slug ?? null,
-    nextTitleKey: next?.titleKey ?? null,
   }
 }
 
@@ -77,22 +54,8 @@ export function contentTranslationKeys(source = content) {
   if (loom) {
     pushKey(keys, loom.titleKey)
     pushKey(keys, loom.introKey)
-    pushKey(keys, loom.availableKey)
     pushKey(keys, loom.soonKey)
-    pushKey(keys, loom.soonBodyKey)
-    for (const module of loom.modules ?? []) {
-      pushKey(keys, module.titleKey)
-      pushKey(keys, module.summaryKey)
-      for (const section of module.sections ?? []) {
-        pushKey(keys, section.headingKey)
-        pushKey(keys, section.bodyKey)
-        for (const part of section.parts ?? []) {
-          pushKey(keys, part.headingKey)
-          pushKey(keys, part.bodyKey)
-        }
-        for (const key of section.keywordKeys ?? []) pushKey(keys, key)
-      }
-    }
+    for (const module of loom.modules ?? []) pushKey(keys, module.titleKey)
   }
   return keys
 }
@@ -118,11 +81,6 @@ function loomMethods(loom, source) {
     async listLoomModules() {
       return loomModulesInOrder(loom).map((module) => ({ ...module, source }))
     },
-    async getLoomLesson(slug) {
-      const lesson = loomLessonAt(slug, loom)
-      if (!lesson) throw new Error(`Unknown lesson: ${slug}`)
-      return { ...lesson, source }
-    },
   }
 }
 
@@ -139,7 +97,7 @@ function createLocalAdapter(pages, loom) {
 
 function createSupabaseAdapter(pages, loom, { url, anonKey }) {
   const lessons = lessonMethods(pages, 'supabase')
-  const loomLessons = loomMethods(loom, 'supabase')
+  const loomIndex = loomMethods(loom, 'supabase')
   return {
     kind: 'supabase',
     async getPage(id) {
@@ -157,15 +115,11 @@ function createSupabaseAdapter(pages, loom, { url, anonKey }) {
     },
     async getLoomIndex() {
       if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
-      return loomLessons.getLoomIndex()
+      return loomIndex.getLoomIndex()
     },
     async listLoomModules() {
       if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
-      return loomLessons.listLoomModules()
-    },
-    async getLoomLesson(slug) {
-      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
-      return loomLessons.getLoomLesson(slug)
+      return loomIndex.listLoomModules()
     },
   }
 }

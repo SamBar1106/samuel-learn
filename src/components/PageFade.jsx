@@ -27,7 +27,6 @@ export function PageFade() {
           <Route path="/lessons" element={<LessonsIndex />} />
           <Route path="/lessons/:slug" element={<Lesson />} />
           <Route path="/loom" element={<LoomIndex />} />
-          <Route path="/loom/:slug" element={<Lesson course="loom" />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </motion.div>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 import { data, loomIndexMeta, loomModulesInOrder } from '../lib/data'
 
 export function LoomIndex() {
@@ -38,22 +37,14 @@ export function LoomIndex() {
           <h1>{t(page.titleKey)}</h1>
           <p className="loom-intro">{t(page.introKey)}</p>
           <ol start={0}>
-            {modules.map((module) => {
-              const available = module.status === 'available' && Boolean(module.slug)
-              return (
-                <li key={module.id} className="loom-module" data-status={available ? 'available' : 'soon'}>
-                  <div className="loom-module-head">
-                    {available ? (
-                      <Link to={`/loom/${module.slug}`}>{t(module.titleKey)}</Link>
-                    ) : (
-                      <span className="loom-module-title">{t(module.titleKey)}</span>
-                    )}
-                    <span className="loom-status">{t(available ? page.availableKey : page.soonKey)}</span>
-                  </div>
-                  <p className="loom-module-note">{t(available ? module.summaryKey : page.soonBodyKey)}</p>
-                </li>
-              )
-            })}
+            {modules.map((module) => (
+              <li key={module.id} className="loom-module" data-status="soon">
+                <div className="loom-module-head">
+                  <span className="loom-module-title">{t(module.titleKey)}</span>
+                  <span className="loom-status">{t(page.soonKey)}</span>
+                </div>
+              </li>
+            ))}
           </ol>
         </article>
       </main>
