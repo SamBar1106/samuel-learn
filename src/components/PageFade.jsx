@@ -9,6 +9,7 @@ import { Areas } from '../pages/Areas'
 import { Home } from '../pages/Home'
 import { Lesson } from '../pages/Lesson'
 import { LessonsIndex } from '../pages/LessonsIndex'
+import { LoomIndex } from '../pages/LoomIndex'
 
 function ScrollReset() {
   const location = useLocation()
@@ -66,6 +67,7 @@ export function PageFade() {
             <Route path="/about" element={<About />} />
             <Route path="/lessons" element={<LessonsIndex />} />
             <Route path="/lessons/:slug" element={<Lesson />} />
+            <Route path="/loom" element={<LoomIndex />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </motion.div>

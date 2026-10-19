@@ -766,8 +766,37 @@ h3 {
 }
 
 .lesson-index-list a,
-.lesson-nav a {
+.lesson-nav a,
+.loom-module-title,
+.loom-intro {
   overflow-wrap: anywhere;
+}
+
+.loom-intro {
+  max-width: 40rem;
+}
+
+.loom-module {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+  min-width: 0;
+  color: var(--muted);
+}
+
+.loom-module-title {
+  min-width: 0;
+  color: var(--text);
+}
+
+.loom-status {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.12rem 0.55rem;
 }
 
 .lesson-nav {

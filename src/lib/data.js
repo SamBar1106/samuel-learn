@@ -27,6 +27,30 @@ export function lessonAt(slug, pages = content.pages) {
   }
 }
 
+export function loomModulesInOrder(loom = content.loom) {
+  return loom?.modules ?? []
+}
+
+export function loomIndexMeta(loom = content.loom) {
+  return {
+    id: loom.id,
+    titleKey: loom.titleKey,
+    introKey: loom.introKey,
+    soonKey: loom.soonKey,
+  }
+}
+
+function loomMethods(loom, source) {
+  return {
+    async getLoomIndex() {
+      return { ...loomIndexMeta(loom), source }
+    },
+    async listLoomModules() {
+      return loomModulesInOrder(loom).map((module) => ({ ...module, source }))
+    },
+  }
+}
+
 function lessonMethods(pages, source) {
   return {
     async getLesson(slug) {
@@ -48,7 +72,7 @@ function listAreas(areas, source) {
   return areas.map((area) => ({ ...area, source }))
 }
 
-function createLocalAdapter(pages, areas) {
+function createLocalAdapter(pages, areas, loom) {
   return {
     kind: 'local',
     async getPage(id) {
@@ -58,10 +82,12 @@ function createLocalAdapter(pages, areas) {
       return listAreas(areas, 'local')
     },
     ...lessonMethods(pages, 'local'),
+    ...loomMethods(loom, 'local'),
   }
 }
 
-function createSupabaseAdapter(pages, areas, { url, anonKey }) {
+function createSupabaseAdapter(pages, areas, loom, { url, anonKey }) {
+  const loomIndex = loomMethods(loom, 'supabase')
   return {
     kind: 'supabase',
     async getPage(id) {
@@ -81,6 +107,14 @@ function createSupabaseAdapter(pages, areas, { url, anonKey }) {
       if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
       return lessonMethods(pages, 'supabase').listLessons()
     },
+    async getLoomIndex() {
+      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
+      return loomIndex.getLoomIndex()
+    },
+    async listLoomModules() {
+      if (!url || !anonKey) throw new Error('Supabase adapter is missing configuration')
+      return loomIndex.listLoomModules()
+    },
   }
 }
 
@@ -88,11 +122,11 @@ function configured(value) {
   return typeof value === 'string' && value.trim() !== ''
 }
 
-export function chooseAdapter(env = {}, pages = content.pages, areas = content.areas) {
+export function chooseAdapter(env = {}, pages = content.pages, areas = content.areas, loom = content.loom) {
   const url = configured(env.VITE_SUPABASE_URL) ? env.VITE_SUPABASE_URL.trim() : ''
   const anonKey = configured(env.VITE_SUPABASE_ANON_KEY) ? env.VITE_SUPABASE_ANON_KEY.trim() : ''
-  if (url && anonKey) return createSupabaseAdapter(pages, areas, { url, anonKey })
-  return createLocalAdapter(pages, areas)
+  if (url && anonKey) return createSupabaseAdapter(pages, areas, loom, { url, anonKey })
+  return createLocalAdapter(pages, areas, loom)
 }
 
 function clientEnv() {

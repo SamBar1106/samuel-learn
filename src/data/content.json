@@ -412,5 +412,85 @@
         "Lenis"
       ]
     }
-  ]
+  ],
+  "loom": {
+    "id": "loom",
+    "titleKey": "loom.index.title",
+    "introKey": "loom.index.intro",
+    "soonKey": "loom.status.soon",
+    "modules": [
+      {
+        "id": "loom-0",
+        "number": 0,
+        "status": "soon",
+        "titleKey": "loom.m0.title"
+      },
+      {
+        "id": "loom-1",
+        "number": 1,
+        "status": "soon",
+        "titleKey": "loom.m1.title"
+      },
+      {
+        "id": "loom-2",
+        "number": 2,
+        "status": "soon",
+        "titleKey": "loom.m2.title"
+      },
+      {
+        "id": "loom-3",
+        "number": 3,
+        "status": "soon",
+        "titleKey": "loom.m3.title"
+      },
+      {
+        "id": "loom-4",
+        "number": 4,
+        "status": "soon",
+        "titleKey": "loom.m4.title"
+      },
+      {
+        "id": "loom-5",
+        "number": 5,
+        "status": "soon",
+        "titleKey": "loom.m5.title"
+      },
+      {
+        "id": "loom-6",
+        "number": 6,
+        "status": "soon",
+        "titleKey": "loom.m6.title"
+      },
+      {
+        "id": "loom-7",
+        "number": 7,
+        "status": "soon",
+        "titleKey": "loom.m7.title"
+      },
+      {
+        "id": "loom-8",
+        "number": 8,
+        "status": "soon",
+        "titleKey": "loom.m8.title"
+      },
+      {
+        "id": "loom-9",
+        "number": 9,
+        "status": "soon",
+        "titleKey": "loom.m9.title"
+      },
+      {
+        "id": "loom-10",
+        "number": 10,
+        "status": "soon",
+        "titleKey": "loom.m10.title"
+      },
+      {
+        "id": "loom-11",
+        "number": 11,
+        "status": "soon",
+        "titleKey": "loom.m11.title"
+      }
+    ]
+  }
 }

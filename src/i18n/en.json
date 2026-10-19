@@ -349,5 +349,50 @@
   },
   "about": {
     "title": "About"
+  },
+  "loom": {
+    "index": {
+      "title": "Loom course — build a store-builder, step by step",
+      "intro": "Loom is the product you are building. This course follows the 11 build stages, one module each. Modules appear as each stage starts."
+    },
+    "status": {
+      "soon": "Coming soon"
+    },
+    "m0": {
+      "title": "The big picture"
+    },
+    "m1": {
+      "title": "Stripe platform setup"
+    },
+    "m2": {
+      "title": "Backend foundation"
+    },
+    "m3": {
+      "title": "Client onboarding"
+    },
+    "m4": {
+      "title": "Payment flow"
+    },
+    "m5": {
+      "title": "Image storage"
+    },
+    "m6": {
+      "title": "Dashboard"
+    },
+    "m7": {
+      "title": "Store sites"
+    },
+    "m8": {
+      "title": "Email"
+    },
+    "m9": {
+      "title": "Launch and hardening"
+    },
+    "m10": {
+      "title": "iPhone app build"
+    },
+    "m11": {
+      "title": "App Store submission and launch"
+    }
   }
 }

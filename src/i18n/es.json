@@ -349,5 +349,50 @@
   },
   "about": {
     "title": "Acerca de"
+  },
+  "loom": {
+    "index": {
+      "title": "Curso Loom: construye un creador de tiendas, paso a paso",
+      "intro": "Loom es el producto que estás construyendo. Este curso sigue las 11 etapas de construcción, un módulo por etapa. Los módulos aparecen cuando empieza cada etapa."
+    },
+    "status": {
+      "soon": "Próximamente"
+    },
+    "m0": {
+      "title": "La visión general"
+    },
+    "m1": {
+      "title": "Configuración de la plataforma Stripe"
+    },
+    "m2": {
+      "title": "Base del backend"
+    },
+    "m3": {
+      "title": "Incorporación de clientes"
+    },
+    "m4": {
+      "title": "Flujo de pagos"
+    },
+    "m5": {
+      "title": "Almacenamiento de imágenes"
+    },
+    "m6": {
+      "title": "Panel de control"
+    },
+    "m7": {
+      "title": "Sitios de las tiendas"
+    },
+    "m8": {
+      "title": "Correo electrónico"
+    },
+    "m9": {
+      "title": "Lanzamiento y refuerzo de seguridad"
+    },
+    "m10": {
+      "title": "Construcción de la app para iPhone"
+    },
+    "m11": {
+      "title": "Envío a la App Store y lanzamiento"
+    }
   }
 }

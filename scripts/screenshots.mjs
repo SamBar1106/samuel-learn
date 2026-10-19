@@ -30,6 +30,7 @@ const pages = [
   { name: 'lesson', path: '/lessons/component' },
   { name: 'lessons-index', path: '/lessons' },
   { name: 'lesson-mcp', path: '/lessons/mcp' },
+  { name: 'loom-index', path: '/loom' },
 ]
 
 const iphone = {
@@ -93,6 +94,16 @@ try {
         }
         if (overflow > 1) throw new Error(`${entry.name} ${width} overflows by ${overflow}px`)
         if (headingTop < 48) throw new Error(`${entry.name} heading is hidden under the header`)
+        if (entry.name === 'loom-index') {
+          const copy = catalogs[lang].loom
+          const soon = await page.getByText(copy.status.soon, { exact: true }).count()
+          const links = await page.locator('main').getByRole('link').count()
+          const heading = (await page.getByRole('heading', { level: 1 }).innerText()).trim()
+          if (heading !== copy.index.title) throw new Error(`${lang} loom heading was ${heading}`)
+          if (soon !== 12 || links !== 0) {
+            throw new Error(`${lang} loom index has ${soon} coming-soon labels and ${links} links`)
+          }
+        }
         if (entry.name === 'lessons-index') {
           const first = (await page.getByRole('listitem').first().innerText()).trim()
           if (first !== catalogs[lang].lesson.mcp.title) {

@@ -40,6 +40,9 @@ export function Home() {
           <Link className="button button-ghost" to="/lessons">
             {t('lessons.back')}
           </Link>
+          <Link className="button button-ghost" to="/loom">
+            {t('loom.index.title')}
+          </Link>
         </div>
       </section>
 
